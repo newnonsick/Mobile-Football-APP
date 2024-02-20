@@ -1,0 +1,32 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+class AllMatches {
+  final Map<String, dynamic> competition;
+  final Map<String, dynamic> filters;
+  final List<dynamic> matches;
+  final Map<String, dynamic> resultSet;
+
+  const AllMatches(
+      this.competition, this.filters, this.matches, this.resultSet);
+
+  factory AllMatches.fromJson(Map<String, dynamic> json) {
+    return AllMatches(
+      json['competition'] as Map<String, dynamic>,
+      json['filters'] as Map<String, dynamic>,
+      json['matches'] as List<dynamic>,
+      json['resultSet'] as Map<String, dynamic>,
+    );
+  }
+}
+
+Future<AllMatches> fetchAllMatches() async {
+  final response = await http.get(Uri.parse(
+      'http://132.145.68.135:6010/getAllMatches'));
+
+  if (response.statusCode == 200) {
+    return AllMatches.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+  } else {
+    throw Exception('Failed to load AllMatches');
+  }
+}
