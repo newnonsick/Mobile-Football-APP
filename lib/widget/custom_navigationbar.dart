@@ -13,7 +13,18 @@ class CustomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 0,
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -27,13 +38,13 @@ class CustomNavigationBar extends StatelessWidget {
             children: [
               const SizedBox(width: 15),
               _buildButton(
-                Icons.home,
+                Icons.sports_soccer,
                 selectedIndex,
                 onItemTapped,
                 0,
               ),
               _buildButton(
-                Icons.table_chart,
+                Icons.equalizer,
                 selectedIndex,
                 onItemTapped,
                 1,

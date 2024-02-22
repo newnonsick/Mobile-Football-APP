@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'all_match_page.dart';
-import 'api/upcomingmatches_api.dart';
-import 'api/livematches_api.dart';
+import '../api/upcomingmatches_api.dart';
+import '../api/livematches_api.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
@@ -74,7 +76,7 @@ class _HomePageState extends State<HomePage> {
       future: futureLiveMatches,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return Platform.isIOS ? const CupertinoActivityIndicator() : const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -276,7 +278,9 @@ class _HomePageState extends State<HomePage> {
         future: futureUpcomingMatches,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return Platform.isIOS
+                ? const CupertinoActivityIndicator()
+                : const CircularProgressIndicator();
           } else if (snapshot.hasError) {
             print(snapshot.error);
             return Column(
@@ -429,7 +433,8 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(width: 70, height: 70, child: crestHomeWidget),
+                    SizedBox(width: 55, height: 55, child: crestHomeWidget),
+                    const SizedBox(height: 5.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -465,7 +470,8 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(width: 70, height: 70, child: crestAwayWidget),
+                    SizedBox(width: 55, height: 55, child: crestAwayWidget),
+                    const SizedBox(height: 5.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

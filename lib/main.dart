@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:project/custom_navigationbar.dart';
-import 'package:project/homepage.dart';
-import 'package:project/profilepage.dart';
-import 'package:project/tablepage.dart';
+import 'package:project/widget/custom_navigationbar.dart';
+import 'package:project/page/homepage.dart';
+import 'package:project/page/profilepage.dart';
+import 'package:project/page/statpage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,14 +31,16 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (_selectedIndex != index) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   final List<Widget> _pages = [
     const HomePage(),
-    TablePage(),
+    StatPage(),
     ProfilePage(),
   ];
 
@@ -59,53 +61,70 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      // body: Center(
-      //   child: Column(
-      //     mainAxisAlignment: MainAxisAlignment.end,
-      //     children: [
-      //       Expanded(
-      //         child: _pages[_selectedIndex],
-      //       ),
-      //       CustomNavigationBar(
-      //         selectedIndex: _selectedIndex,
-      //         onItemTapped: _onItemTapped,
-      //       ),
-      //     ],
-      //   ),)
 
-      body: Stack(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: _pages[_selectedIndex],
-              ),
-            ],
-          ),
-          Positioned(
-            left: 10,
-            right: 10,
-            bottom: 10,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 20,
-                    spreadRadius: 3,
-                  ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: CustomNavigationBar(
-                  selectedIndex: _selectedIndex,
-                  onItemTapped: _onItemTapped,
+      body: _selectedIndex == 0 ? _useStack() : _useColumn(),
+    );
+  }
+
+  Widget _useStack() {
+    return Stack(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: _pages[_selectedIndex],
+            ),
+          ],
+        ),
+        Positioned(
+          left: 10,
+          right: 10,
+          bottom: 10,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 20,
+                  spreadRadius: 3,
                 ),
-              ),
+              ],
+            ),
+            child: CustomNavigationBar(
+              selectedIndex: _selectedIndex,
+              onItemTapped: _onItemTapped,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _useColumn() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Expanded(
+            child: _pages[_selectedIndex],
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 20,
+                  spreadRadius: 3,
+                ),
+              ],
+            ),
+            child: CustomNavigationBar(
+              selectedIndex: _selectedIndex,
+              onItemTapped: _onItemTapped,
             ),
           ),
         ],

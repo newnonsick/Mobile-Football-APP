@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'api/matchesofday_api.dart';
+import '../api/matchesofday_api.dart';
 // import 'api/allmatches_api.dart';
 
 class AllMatchPage extends StatefulWidget {
