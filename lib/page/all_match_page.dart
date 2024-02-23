@@ -176,23 +176,23 @@ class _AllMatchPageState extends State<AllMatchPage> {
     String formattedDate = DateFormat('dd MMM yyyy').format(utcDate.toLocal());
     String formattedTime = DateFormat('HH:mm').format(utcDate.toLocal());
 
-    String crestHomeUrl = match['homeTeam']['crest'];
+    String crestHomeUrl = 'https://corsproxy.io/?${match['homeTeam']['crest']}';
     Widget crestHomeWidget;
-    String crestAwayUrl = match['awayTeam']['crest'];
+    String crestAwayUrl = 'https://corsproxy.io/?${match['awayTeam']['crest']}';
     Widget crestAwayWidget;
 
     if (crestHomeUrl.endsWith('.svg')) {
       crestHomeWidget = SvgPicture.network(
         crestHomeUrl,
-        width: 70,
-        height: 70,
+        width: 55,
+        height: 55,
         fit: BoxFit.contain,
       );
     } else {
       crestHomeWidget = Image.network(
         crestHomeUrl,
-        width: 70,
-        height: 70,
+        width: 55,
+        height: 55,
         fit: BoxFit.contain,
       );
     }
@@ -200,15 +200,15 @@ class _AllMatchPageState extends State<AllMatchPage> {
     if (crestAwayUrl.endsWith('.svg')) {
       crestAwayWidget = SvgPicture.network(
         crestAwayUrl,
-        width: 70,
-        height: 70,
+        width: 55,
+        height: 55,
         fit: BoxFit.contain,
       );
     } else {
       crestAwayWidget = Image.network(
         crestAwayUrl,
-        width: 70,
-        height: 70,
+        width: 55,
+        height: 55,
         fit: BoxFit.contain,
       );
     }
@@ -227,11 +227,11 @@ class _AllMatchPageState extends State<AllMatchPage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               SizedBox(
-                width: 103,
+                width: 105,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(width: 70, height: 70, child: crestHomeWidget),
+                    SizedBox(width: 55, height: 55, child: crestHomeWidget),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -263,11 +263,11 @@ class _AllMatchPageState extends State<AllMatchPage> {
                 ],
               ),
               SizedBox(
-                width: 103,
+                width: 105,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(width: 70, height: 70, child: crestAwayWidget),
+                    SizedBox(width: 55, height: 55, child: crestAwayWidget),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

@@ -88,7 +88,9 @@ class _StandingPageState extends State<StandingPage> {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: DataTable(
-                columnSpacing: 15,
+                columnSpacing: MediaQuery.of(context).size.width < 585
+                    ? 15
+                    : MediaQuery.of(context).size.width / 14.1,
                 columns: const [
                   DataColumn(
                     label: Text('Club',
@@ -152,11 +154,13 @@ class _StandingPageState extends State<StandingPage> {
                               width: 30,
                               height: 30,
                               child: club['team']['crest'].endsWith('.svg')
-                                  ? SvgPicture.network(club['team']['crest'],
+                                  ? SvgPicture.network(
+                                      "https://corsproxy.io/?${club['team']['crest']}",
                                       width: 30,
                                       height: 30,
                                       fit: BoxFit.contain)
-                                  : Image.network(club['team']['crest'],
+                                  : Image.network(
+                                      "https://corsproxy.io/?${club['team']['crest']}",
                                       width: 30,
                                       height: 30,
                                       fit: BoxFit.contain),
