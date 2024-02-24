@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:project/page/standingpage.dart';
+import 'package:project/page/statisticspage.dart';
 
-class StatPage extends StatefulWidget {
-  const StatPage({Key? key}) : super(key: key);
+class InfoPage extends StatefulWidget {
+  const InfoPage({Key? key}) : super(key: key);
 
   @override
-  State<StatPage> createState() => _StatPageState();
+  State<InfoPage> createState() => _InfoPageState();
 }
 
-class _StatPageState extends State<StatPage> {
+class _InfoPageState extends State<InfoPage> {
   @override
   void dispose() {
     super.dispose();
@@ -41,9 +42,7 @@ class _StatPageState extends State<StatPage> {
             child: TabBarView(
               children: [
                 StandingPage(),
-                Center(
-                  child: Text('Statistics'),
-                ),
+                StatisticsPage()
               ],
             ),
           ),

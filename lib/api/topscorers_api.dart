@@ -34,3 +34,11 @@ Future<TopScorers> fetchTopScorers() async {
     throw Exception('Failed to load TopScorers');
   }
 }
+
+Future<TopScorers> parseTopScorers(dynamic data) async {
+  try {
+    return TopScorers.fromJson(data);
+  } catch (e) {
+    throw Exception('Failed to parse Standings: $e');
+  }
+}

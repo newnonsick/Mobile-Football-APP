@@ -65,9 +65,9 @@ class _HomePageState extends State<HomePage>
 
   @override
   void dispose() {
+    _loadingController.dispose();
     socket.disconnect();
     super.dispose();
-    _loadingController.dispose();
   }
 
   @override
@@ -93,13 +93,14 @@ class _HomePageState extends State<HomePage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 20.0, right: 20.0),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: Text(
                 'Live Match',
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Colors.pink[800],
                   fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -178,14 +179,14 @@ class _HomePageState extends State<HomePage>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                       child: Text(
                         'Live Match',
                         style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20.0,
-                        ),
+                            color: Colors.pink[800],
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                     const SizedBox(height: 10.0),
@@ -346,11 +347,12 @@ class _HomePageState extends State<HomePage>
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Upcoming Matchs',
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.pink[800],
                       fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   TextButton(
@@ -442,11 +444,12 @@ class _HomePageState extends State<HomePage>
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
+                            Text(
                               'Upcoming Matchs',
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.pink[800],
                                 fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                             TextButton(
@@ -465,9 +468,9 @@ class _HomePageState extends State<HomePage>
                                     });
                                   });
                                 },
-                                child: Text('See All',
+                                child: const Text('See All',
                                     style: TextStyle(
-                                        color: Colors.pink[800], fontSize: 15)))
+                                        color: Colors.black, fontSize: 15)))
                           ]),
                     ),
                     const SizedBox(height: 10.0),

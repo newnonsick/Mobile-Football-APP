@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project/widget/custom_navigationbar.dart';
 import 'package:project/page/homepage.dart';
 import 'package:project/page/profilepage.dart';
-import 'package:project/page/statpage.dart';
+import 'package:project/page/infopage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -40,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final List<Widget> _pages = [
     const HomePage(),
-    const StatPage(),
+    const InfoPage(),
     ProfilePage(),
   ];
 
