@@ -217,9 +217,9 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget _buildLiveMatchItem(Map<String, dynamic> match) {
-    String crestHomeUrl = match['homeTeam']['crest'];
+    String crestHomeUrl = 'https://corsproxy.io/?${match['homeTeam']['crest']}';
     Widget crestHomeWidget;
-    String crestAwayUrl = match['awayTeam']['crest'];
+    String crestAwayUrl = 'https://corsproxy.io/?${match['awayTeam']['crest']}';
     Widget crestAwayWidget;
 
     if (crestHomeUrl.endsWith('.svg')) {

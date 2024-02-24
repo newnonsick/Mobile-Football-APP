@@ -127,7 +127,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -183,7 +183,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               ),
                             ),
                             Image.network(
-                              'https://resources.premierleague.com/premierleague/photos/players/110x140/${snapshot.data!.scorers[0]['moreInfo']['altIds']['opta']}.png',
+                              'https://corsproxy.io/?https://resources.premierleague.com/premierleague/photos/players/110x140/${snapshot.data!.scorers[0]['moreInfo']['altIds']['opta']}.png',
                               fit: BoxFit.contain,
                               height: 150,
                               width: 150,
@@ -238,7 +238,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     radius: 30,
                     backgroundColor: Colors.pink[800],
                     child: Image.network(
-                      'https://resources.premierleague.com/premierleague/photos/players/250x250/${scorers['moreInfo']['altIds']['opta']}.png',
+                      'https://corsproxy.io/?https://resources.premierleague.com/premierleague/photos/players/250x250/${scorers['moreInfo']['altIds']['opta']}.png',
                       fit: BoxFit.contain,
                       height: 60,
                       width: 60,
@@ -309,6 +309,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
       }
       index++;
     }
-    return -1; // Return -1 if not found
+    return -1;
   }
 }
