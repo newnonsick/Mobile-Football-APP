@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'all_match_page.dart';
 import '../api/upcomingmatches_api.dart';
@@ -16,13 +14,27 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   late Future<LiveMatches> futureLiveMatches;
   late Future<UpcomingMatches> futureUpcomingMatches;
   late io.Socket socket;
+  late AnimationController _loadingController;
+  late Animation<Color?> _loadingAnimation;
+
+  bool liveLoaded = false;
+  bool upcomingLoaded = false;
 
   @override
   void initState() {
+    _loadingController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat();
+
+    _loadingAnimation = ColorTween(begin: Colors.white, end: Colors.grey[300])
+        .animate(_loadingController);
+
     futureLiveMatches = fetchLiveMatches();
     futureUpcomingMatches = fetchUpcomingMatches();
     super.initState();
@@ -55,6 +67,7 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     socket.disconnect();
     super.dispose();
+    _loadingController.dispose();
   }
 
   @override
@@ -71,12 +84,62 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _buildLoadingLiveMatch() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+      child: Container(
+        color: Colors.white,
+        height: 250.0,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 20.0, right: 20.0),
+              child: Text(
+                'Live Match',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20.0,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10.0),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                ),
+                scrollDirection: Axis.horizontal,
+                children: List.generate(2, (int index) {
+                  return AnimatedBuilder(
+                    animation: _loadingAnimation,
+                    builder: (context, child) {
+                      return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          color: _loadingAnimation.value,
+                          child: const SizedBox(
+                            width: 300.0,
+                            height: 250.0,
+                          ));
+                    },
+                  );
+                }),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildLiveMatch() {
     return FutureBuilder<LiveMatches>(
       future: futureLiveMatches,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Platform.isIOS ? const CupertinoActivityIndicator() : const CircularProgressIndicator();
+          return _buildLoadingLiveMatch();
         } else if (snapshot.hasError) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -273,14 +336,72 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _buildLoadingUpcomingMatch() {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Upcoming Matchs',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AllMatchPage(),
+                          ),
+                        ).then((value) {
+                          setState(() {
+                            futureUpcomingMatches = fetchUpcomingMatches();
+                            futureLiveMatches = fetchLiveMatches();
+                          });
+                        });
+                      },
+                      child: Text('See All',
+                          style:
+                              TextStyle(color: Colors.pink[800], fontSize: 15)))
+                ]),
+          ),
+          const SizedBox(height: 10.0),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              scrollDirection: Axis.vertical,
+              children: List.generate(5, (int index) {
+                return AnimatedBuilder(
+                    animation: _loadingAnimation,
+                    builder: (context, child) {
+                      return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          color: _loadingAnimation.value,
+                          child: const SizedBox(width: 300.0, height: 100.0));
+                    });
+              }),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildUpcomingMatch() {
     return FutureBuilder(
         future: futureUpcomingMatches,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Platform.isIOS
-                ? const CupertinoActivityIndicator()
-                : const CircularProgressIndicator();
+            return _buildLoadingUpcomingMatch();
           } else if (snapshot.hasError) {
             print(snapshot.error);
             return Column(

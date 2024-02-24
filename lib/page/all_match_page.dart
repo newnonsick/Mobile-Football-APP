@@ -11,10 +11,13 @@ class AllMatchPage extends StatefulWidget {
   State<AllMatchPage> createState() => _AllMatchPageState();
 }
 
-class _AllMatchPageState extends State<AllMatchPage> {
+class _AllMatchPageState extends State<AllMatchPage>
+    with SingleTickerProviderStateMixin {
   late DateTime selectedDate;
   // late Future<AllMatches> futureAllMatches;
   late Future<MatchesOfDay> futureMatchesOfDay;
+  late AnimationController _loadingController;
+  late Animation<Color?> _loadingAnimation;
 
   @override
   void initState() {
@@ -24,6 +27,20 @@ class _AllMatchPageState extends State<AllMatchPage> {
     futureMatchesOfDay = fetchMatchesOfDay(
         DateFormat('yyyy-MM-dd').format(selectedDate),
         selectedDate.timeZoneOffset.toString());
+
+    _loadingController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat();
+
+    _loadingAnimation = ColorTween(begin: Colors.white, end: Colors.grey[300])
+        .animate(_loadingController);
+  }
+
+  @override
+  void dispose() {
+    _loadingController.dispose();
+    super.dispose();
   }
 
   Future<void> _showDatePicker(BuildContext context) async {
@@ -109,11 +126,22 @@ class _AllMatchPageState extends State<AllMatchPage> {
       future: futureMatchesOfDay,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircularProgressIndicator(),
-            ],
+          return Expanded(
+            child: ListView.builder(
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return AnimatedBuilder(
+                    animation: _loadingAnimation,
+                    builder: (context, child) {
+                      return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          color: _loadingAnimation.value,
+                          child: const SizedBox(width: 300.0, height: 100.0));
+                    });
+              },
+            ),
           );
         } else if (snapshot.hasError) {
           return Expanded(
@@ -232,6 +260,7 @@ class _AllMatchPageState extends State<AllMatchPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(width: 55, height: 55, child: crestHomeWidget),
+                    const SizedBox(height: 5.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -268,6 +297,7 @@ class _AllMatchPageState extends State<AllMatchPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(width: 55, height: 55, child: crestAwayWidget),
+                    const SizedBox(height: 5.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
