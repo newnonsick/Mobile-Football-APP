@@ -166,12 +166,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
             );
           } else if (snapshot.hasData) {
             Color imageColor = snapshot.data!.dominantColor!.color;
-            return InkWell(
-              onTap: () {
-                print('Most Scorer');
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+            return Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+              child: InkWell(
+                onTap: () {
+                  print('Most Scorer');
+                },
                 child: Container(
                   decoration: BoxDecoration(
                     color: imageColor,
@@ -263,12 +263,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
   Widget _buildTopScorersItem(
       dynamic scorers, List goals, int mostGoalScorerCount) {
     goals.add(scorers['goals']);
-    return InkWell(
-      onTap: () {
-        print('Top Scorer');
-      },
-      child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+    return Padding(
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+        child: InkWell(
+          onTap: () {
+            print('Top Scorer');
+          },
           child: Card(
             color: Colors.white,
             child: SizedBox(
@@ -354,8 +354,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     ),
                   )
                 ])),
-          )),
-    );
+          ),
+        ));
   }
 
   int getIndex(List goals, int goal) {
