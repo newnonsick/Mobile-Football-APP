@@ -13,14 +13,25 @@ class StatisticsPage extends StatefulWidget {
   State<StatisticsPage> createState() => _StatisticsPageState();
 }
 
-class _StatisticsPageState extends State<StatisticsPage> {
+class _StatisticsPageState extends State<StatisticsPage>
+    with SingleTickerProviderStateMixin {
   late Future<TopScorers> futureTopScorers;
   late io.Socket socket;
+  late AnimationController _loadingController;
+  late Animation<Color?> _loadingAnimation;
 
   @override
   void initState() {
     super.initState();
     futureTopScorers = fetchTopScorers();
+
+    _loadingController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat();
+
+    _loadingAnimation = ColorTween(begin: Colors.white, end: Colors.grey[300])
+        .animate(_loadingController);
 
     socket = io.io('http://132.145.68.135:6010', <String, dynamic>{
       'transports': ['websocket'],
@@ -43,6 +54,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
   @override
   void dispose() {
     socket.dispose();
+    _loadingController.dispose();
     super.dispose();
   }
 
@@ -58,7 +70,61 @@ class _StatisticsPageState extends State<StatisticsPage> {
       future: futureTopScorers,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return dataWaiting();
+          return AnimatedBuilder(
+              animation: _loadingAnimation,
+              builder: (context, child) {
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 10.0),
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(left: 20.0, right: 20.0),
+                          child: Text(
+                            'Top 10 Scorers',
+                            style: TextStyle(
+                              color: Colors.pink[800],
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10.0),
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(left: 20.0, right: 20.0),
+                          child: Column(children: [
+                            Card(
+                              color: _loadingAnimation.value,
+                              child: SizedBox(
+                                  height: 150,
+                                  width: MediaQuery.of(context).size.width),
+                            )
+                          ]),
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(left: 20.0, right: 20.0),
+                          child: Column(
+                            children: [
+                              for (int i = 0; i < 10; i++)
+                                Card(
+                                  color: _loadingAnimation.value,
+                                  child: SizedBox(
+                                      height: 100,
+                                      width: MediaQuery.of(context).size.width),
+                                )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              });
         } else if (snapshot.hasError) {
           return dataHasError();
         } else if (snapshot.hasData) {
@@ -124,17 +190,19 @@ class _StatisticsPageState extends State<StatisticsPage> {
         ),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return SizedBox(
-              height: 150.0,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Platform.isIOS
-                      ? const CupertinoActivityIndicator()
-                      : const CircularProgressIndicator()
-                ],
-              ),
-            );
+            return AnimatedBuilder(
+                animation: _loadingAnimation,
+                builder: (context, child) {
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                    child: Card(
+                      color: _loadingAnimation.value,
+                      child: SizedBox(
+                          height: 150,
+                          width: MediaQuery.of(context).size.width),
+                    ),
+                  );
+                });
           } else if (snapshot.hasError) {
             return SizedBox(
               height: 150.0,

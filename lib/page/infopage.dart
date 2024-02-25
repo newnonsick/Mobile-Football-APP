@@ -36,6 +36,12 @@ class _InfoPageState extends State<InfoPage> {
                   color: Colors.pink[800],
                 ),
               ),
+              Tab(
+                icon: Icon(
+                  Icons.search,
+                  color: Colors.pink[800],
+                ),
+              ),
             ],
           ),
           const Expanded(
