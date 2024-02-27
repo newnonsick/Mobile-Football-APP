@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:project/api/topscorers_api.dart';
+import 'package:project/page/playerpage.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class StatisticsPage extends StatefulWidget {
@@ -204,6 +205,7 @@ class _StatisticsPageState extends State<StatisticsPage>
                   );
                 });
           } else if (snapshot.hasError) {
+            print(snapshot.error);
             return SizedBox(
               height: 150.0,
               child: Column(
@@ -238,7 +240,14 @@ class _StatisticsPageState extends State<StatisticsPage>
               padding: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: InkWell(
                 onTap: () {
-                  print('Most Scorer');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PlayerPage(
+                        player: scorer['moreInfo'],
+                      ),
+                    ),
+                  );
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -248,6 +257,13 @@ class _StatisticsPageState extends State<StatisticsPage>
                       topRight: Radius.circular(20.0),
                       bottomRight: Radius.circular(20.0),
                       bottomLeft: Radius.circular(20.0),
+                    ),
+                    image: const DecorationImage(
+                      image: AssetImage(
+                        'assets/images/background2.png',
+                      ),
+                      fit: BoxFit.cover,
+                      opacity: 0.5,
                     ),
                   ),
                   child: Row(
@@ -335,7 +351,14 @@ class _StatisticsPageState extends State<StatisticsPage>
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: InkWell(
           onTap: () {
-            print('Top Scorer');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PlayerPage(
+                  player: scorers['moreInfo'],
+                ),
+              ),
+            );
           },
           child: Card(
             color: Colors.white,
