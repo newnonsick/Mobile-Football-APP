@@ -113,7 +113,7 @@ class _PlayerPageState extends State<PlayerPage> {
                                 color: backgroundColor == Colors.white
                                     ? Colors.black
                                     : Colors.white,
-                                fontSize: 30,
+                                fontSize: 28,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -130,7 +130,7 @@ class _PlayerPageState extends State<PlayerPage> {
                                       color: backgroundColor == Colors.white
                                           ? Colors.black
                                           : Colors.white,
-                                      fontSize: 30,
+                                      fontSize: 28,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   )

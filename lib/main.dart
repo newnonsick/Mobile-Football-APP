@@ -103,32 +103,32 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _useColumn() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Expanded(
-            child: _pages[_selectedIndex],
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 20,
-                  spreadRadius: 3,
-                ),
-              ],
-            ),
-            child: CustomNavigationBar(
-              selectedIndex: _selectedIndex,
-              onItemTapped: _onItemTapped,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _useColumn() {
+  //   return Center(
+  //     child: Column(
+  //       mainAxisAlignment: MainAxisAlignment.end,
+  //       children: [
+  //         Expanded(
+  //           child: _pages[_selectedIndex],
+  //         ),
+  //         Container(
+  //           decoration: BoxDecoration(
+  //             color: Colors.white,
+  //             boxShadow: [
+  //               BoxShadow(
+  //                 color: Colors.black.withOpacity(0.1),
+  //                 blurRadius: 20,
+  //                 spreadRadius: 3,
+  //               ),
+  //             ],
+  //           ),
+  //           child: CustomNavigationBar(
+  //             selectedIndex: _selectedIndex,
+  //             onItemTapped: _onItemTapped,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
