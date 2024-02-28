@@ -16,7 +16,7 @@ class _SearchPlayerPageState extends State<SearchPlayerPage> {
   @override
   void initState() {
     super.initState();
-    futureSearchPlayer = fetchSearchPlayer(' ');
+    futureSearchPlayer = fetchSearchPlayer('a');
   }
 
   @override

@@ -144,13 +144,12 @@ class _PlayerPageState extends State<PlayerPage> {
                                     fit: BoxFit.contain),
                                 const SizedBox(width: 5),
                                 Text(
-                                  widget.player['currentTeam']['club']
-                                      ['shortName'],
+                                  widget.player['currentTeam']['shortName'],
                                   style: TextStyle(
                                     color: backgroundColor == Colors.white
                                         ? Colors.black
                                         : Colors.white,
-                                    fontSize: 16,
+                                    fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -174,8 +173,8 @@ class _PlayerPageState extends State<PlayerPage> {
                   Center(
                     child: Image.network(
                       'https://corsproxy.io/?https://resources.premierleague.com/premierleague/photos/players/250x250/${widget.player['altIds']['opta']}.png',
-                      height: 200,
-                      width: 200,
+                      height: 190,
+                      width: 190,
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -396,7 +395,7 @@ class _PlayerPageState extends State<PlayerPage> {
   }
 
   Widget _buildPersonalStat() {
-     return Padding(
+    return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Container(
         decoration: BoxDecoration(
