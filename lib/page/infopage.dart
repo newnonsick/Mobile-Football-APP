@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project/page/searchplayerpage.dart';
 import 'package:project/page/standingpage.dart';
 import 'package:project/page/statisticspage.dart';
 
@@ -18,7 +19,7 @@ class _InfoPageState extends State<InfoPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Column(
         children: [
           TabBar(
@@ -36,19 +37,20 @@ class _InfoPageState extends State<InfoPage> {
                   color: Colors.pink[800],
                 ),
               ),
-              // Tab(
-              //   icon: Icon(
-              //     Icons.search,
-              //     color: Colors.pink[800],
-              //   ),
-              // ),
+              Tab(
+                icon: Icon(
+                  Icons.search,
+                  color: Colors.pink[800],
+                ),
+              ),
             ],
           ),
           const Expanded(
             child: TabBarView(
               children: [
                 StandingPage(),
-                StatisticsPage()
+                StatisticsPage(),
+                SearchPlayerPage()
               ],
             ),
           ),

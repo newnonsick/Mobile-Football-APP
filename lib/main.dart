@@ -61,7 +61,8 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: _selectedIndex == 0 ? _useStack() : _useColumn(),
+      // body: _selectedIndex == 0 ? _useStack() : _useColumn(),
+      body: _useStack(),
     );
   }
 
