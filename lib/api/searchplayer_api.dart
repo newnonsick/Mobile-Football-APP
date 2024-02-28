@@ -17,8 +17,10 @@ class SearchPlayer {
 
 Future<SearchPlayer> fetchSearchPlayer(String playerName) async {
   if (playerName == 'd') {
-    return SearchPlayer.fromJson(
-        {"hits":{"cursor":null,"found":0,"hit":[],"start":0},"facets":{}});
+    return SearchPlayer.fromJson({
+      "hits": {"cursor": null, "found": 0, "hit": [], "start": 0},
+      "facets": {}
+    });
   }
 
   final Map<String, String> headers = {
@@ -41,7 +43,7 @@ Future<SearchPlayer> fetchSearchPlayer(String playerName) async {
 
   final response = await http.get(
     Uri.parse(
-        'https://corsproxy.io/?https://footballapi.pulselive.com/search/PremierLeague/?terms=$playerName,$playerName*&type=player&size=10&start=0&fullObjectResponse=true'),
+        'https://footballapi.pulselive.com/search/PremierLeague/?terms=$playerName,$playerName*&type=player&size=10&start=0&fullObjectResponse=true'),
     headers: headers,
   );
 
