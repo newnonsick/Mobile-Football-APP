@@ -4,15 +4,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:project/myhomepage.dart';
+import 'package:project/page/registerpage.dart';
 
-class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -50,7 +51,7 @@ class _LoginState extends State<Login> {
                   borderRadius: BorderRadius.circular(20),
                   child: Image.asset(
                     'assets/images/logo.jpg',
-                    width: MediaQuery.of(context).size.width * 0.45,
+                    width: MediaQuery.of(context).size.width * 0.4,
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -87,7 +88,7 @@ class _LoginState extends State<Login> {
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white)),
                                 )),
-                            const SizedBox(height: 50),
+                            const SizedBox(height: 60),
                             Form(
                                 key: formKey,
                                 child: Column(
@@ -146,7 +147,7 @@ class _LoginState extends State<Login> {
                                     ),
                                   ],
                                 )),
-                            const SizedBox(height: 50),
+                            const SizedBox(height: 60),
                             Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
@@ -169,7 +170,8 @@ class _LoginState extends State<Login> {
                                     final uid = await loginWithEmailAndPass(
                                         email, password);
                                     if (uid != null) {
-                                      Get.off(() => const MyHomePage(), transition: Transition.fade);
+                                      Get.off(() => const MyHomePage(),
+                                          transition: Transition.fade);
                                     }
                                   }
                                 },
@@ -184,7 +186,8 @@ class _LoginState extends State<Login> {
                             const SizedBox(height: 20),
                             GestureDetector(
                               onTap: () {
-                                print('go to register');
+                                Get.off(() => const RegisterPage(),
+                                    transition: Transition.rightToLeft);
                               },
                               child: RichText(
                                 text: const TextSpan(
@@ -192,7 +195,7 @@ class _LoginState extends State<Login> {
                                   style: TextStyle(color: Colors.black),
                                   children: [
                                     TextSpan(
-                                      text: 'Register',
+                                      text: 'Register here',
                                       style: TextStyle(
                                         color: Colors.pink,
                                         fontWeight: FontWeight.bold,
@@ -242,7 +245,8 @@ class _LoginState extends State<Login> {
                                 onPressed: () async {
                                   final user = await signInWithGoogle();
                                   if (user != null) {
-                                    Get.off(() => const MyHomePage(), transition: Transition.fade);
+                                    Get.off(() => const MyHomePage(),
+                                        transition: Transition.fade);
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -263,6 +267,7 @@ class _LoginState extends State<Login> {
                                 ),
                               ),
                             ),
+                            const SizedBox(height: 20),
                           ],
                         ),
                       ),
@@ -293,23 +298,6 @@ class _LoginState extends State<Login> {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found' || e.code == 'wrong-password') {
         return 'Invalid email or password';
-      }
-      return null;
-    }
-  }
-
-  Future<String?> registerWithEmailAndPass(
-      String email, String password) async {
-    try {
-      final credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return credential.user?.uid;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'email-already-in-use') {
-        return 'Email already in use';
       }
       return null;
     }
