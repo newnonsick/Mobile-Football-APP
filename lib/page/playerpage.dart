@@ -41,7 +41,7 @@ class _PlayerPageState extends State<PlayerPage> {
       body: FutureBuilder<PaletteGenerator>(
         future: PaletteGenerator.fromImageProvider(
           NetworkImage(
-              'https://corsproxy.io/?https://resources.premierleague.com/premierleague/photos/players/110x140/${widget.player['altIds']['opta']}.png',
+              'https://resources.premierleague.com/premierleague/photos/players/110x140/${widget.player['altIds']['opta']}.png',
               scale: 0.5),
         ),
         builder: (context, snapshot) {

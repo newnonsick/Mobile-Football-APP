@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:project/api/topscorers_api.dart';
 import 'package:project/page/playerpage.dart';
@@ -241,14 +242,15 @@ class _StatisticsPageState extends State<StatisticsPage>
               padding: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: InkWell(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PlayerPage(
-                        player: scorer['moreInfo'],
-                      ),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => PlayerPage(
+                  //       player: scorer['moreInfo'],
+                  //     ),
+                  //   ),
+                  // );
+                  Get.to(() => PlayerPage(player: scorer['moreInfo']), transition: Transition.rightToLeft);
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -352,14 +354,15 @@ class _StatisticsPageState extends State<StatisticsPage>
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: InkWell(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => PlayerPage(
-                  player: scorers['moreInfo'],
-                ),
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => PlayerPage(
+            //       player: scorers['moreInfo'],
+            //     ),
+            //   ),
+            // );
+            Get.to(() => PlayerPage(player: scorers['moreInfo']), transition: Transition.rightToLeft);
           },
           child: Card(
             color: Colors.white,

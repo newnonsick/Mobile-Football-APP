@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'all_match_page.dart';
 import '../api/upcomingmatches_api.dart';
 import '../api/livematches_api.dart';
@@ -357,21 +359,22 @@ class _HomePageState extends State<HomePage>
                   ),
                   TextButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AllMatchPage(),
-                          ),
-                        ).then((value) {
-                          setState(() {
-                            futureUpcomingMatches = fetchUpcomingMatches();
-                            futureLiveMatches = fetchLiveMatches();
-                          });
-                        });
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => const AllMatchPage(),
+                        //   ),
+                        // ).then((value) {
+                        //   setState(() {
+                        //     futureUpcomingMatches = fetchUpcomingMatches();
+                        //     futureLiveMatches = fetchLiveMatches();
+                        //   });
+                        // });
+                        Get.to(() => const AllMatchPage(),
+                            transition: Transition.rightToLeft);
                       },
-                      child: Text('See All',
-                          style:
-                              TextStyle(color: Colors.pink[800], fontSize: 15)))
+                      child: const Text('See All',
+                          style: TextStyle(color: Colors.black, fontSize: 15)))
                 ]),
           ),
           const SizedBox(height: 10.0),
@@ -454,19 +457,21 @@ class _HomePageState extends State<HomePage>
                             ),
                             TextButton(
                                 onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const AllMatchPage(),
-                                    ),
-                                  ).then((value) {
-                                    setState(() {
-                                      futureUpcomingMatches =
-                                          fetchUpcomingMatches();
-                                      futureLiveMatches = fetchLiveMatches();
-                                    });
-                                  });
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) =>
+                                  //         const AllMatchPage(),
+                                  //   ),
+                                  // ).then((value) {
+                                  //   setState(() {
+                                  //     futureUpcomingMatches =
+                                  //         fetchUpcomingMatches();
+                                  //     futureLiveMatches = fetchLiveMatches();
+                                  //   });
+                                  // });
+                                  Get.to(() => const AllMatchPage(),
+                                      transition: Transition.rightToLeft);
                                 },
                                 child: const Text('See All',
                                     style: TextStyle(
