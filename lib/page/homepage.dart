@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'all_match_page.dart';
 import '../api/upcomingmatches_api.dart';
@@ -26,7 +27,6 @@ class _HomePageState extends State<HomePage>
 
   bool liveLoaded = false;
   bool upcomingLoaded = false;
-  
 
   @override
   void initState() {
@@ -113,27 +113,29 @@ class _HomePageState extends State<HomePage>
             ),
             const SizedBox(height: 10.0),
             Expanded(
-              child: ListView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20.0,
+              child: PageView.builder(
+                controller: PageController(
+                  initialPage: 0,
+                  viewportFraction: 0.85,
                 ),
-                scrollDirection: Axis.horizontal,
-                children: List.generate(2, (int index) {
+                itemCount: 2,
+                itemBuilder: (context, index) {
                   return AnimatedBuilder(
                     animation: _loadingAnimation,
                     builder: (context, child) {
                       return Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          color: _loadingAnimation.value,
-                          child: const SizedBox(
-                            width: 300.0,
-                            height: 250.0,
-                          ));
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        color: _loadingAnimation.value,
+                        child: const SizedBox(
+                          width: 300.0,
+                          height: 250.0,
+                        ),
+                      );
                     },
                   );
-                }),
+                },
               ),
             ),
           ],
@@ -198,16 +200,17 @@ class _HomePageState extends State<HomePage>
                     ),
                     const SizedBox(height: 10.0),
                     Expanded(
-                      child: ListView(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0,
+                      child: PageView.builder(
+                        controller: PageController(
+                          initialPage: 0,
+                          viewportFraction: 0.85,
                         ),
                         scrollDirection: Axis.horizontal,
-                        children: List.generate(snapshot.data!.matches.length,
-                            (int index) {
+                        itemCount: snapshot.data!.matches.length,
+                        itemBuilder: (BuildContext context, int index) {
                           return _buildLiveMatchItem(
                               snapshot.data!.matches[index]);
-                        }),
+                        },
                       ),
                     ),
                   ],
@@ -273,62 +276,100 @@ class _HomePageState extends State<HomePage>
             height: 250.0,
             child: Column(
               children: [
-                Expanded(
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 20, 0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text('Home',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 13)),
-                            const SizedBox(height: 5.0),
-                            SizedBox(
-                                height: 90.0,
-                                width: 90.0,
-                                child: crestHomeWidget),
-                            const SizedBox(height: 10.0),
-                            Text(match['homeTeam']['shortName'],
-                                style: const TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold))
-                          ]),
-                      Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Card(
-                              color: Colors.white,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text(
-                                    '${match['score']['fullTime']['home']} - ${match['score']['fullTime']['away']}',
-                                    style: const TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold)),
-                              ),
-                            ),
-                          ]),
-                      Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text('Away',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 13)),
-                            const SizedBox(height: 5.0),
-                            SizedBox(
-                                height: 90.0,
-                                width: 90.0,
-                                child: crestAwayWidget),
-                            const SizedBox(height: 10.0),
-                            Text(match['awayTeam']['shortName'],
-                                style: const TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold)),
-                          ]),
+                      Row(
+                        children: [
+                          const Text('LIVE',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                  color: Color.fromRGBO(0, 100, 0, 1))),
+                          const SizedBox(width: 5.0),
+                          Container(
+                            height: 10.0,
+                            width: 10.0,
+                            decoration: BoxDecoration(
+                                color: Colors.grey[100],
+                                shape: BoxShape.circle),
+                          )
+                        ],
+                      )
+                          .animate(
+                              onPlay: (controller) =>
+                                  controller.repeat(reverse: true))
+                          .tint(
+                              color: const Color.fromRGBO(0, 100, 0, 1),
+                              delay: 2000.ms,
+                              curve: Curves.easeInOut,
+                              duration: 600.ms)
                     ],
                   ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          SizedBox(
+                              height: 90.0,
+                              width: 90.0,
+                              child: crestHomeWidget),
+                          const SizedBox(height: 10.0),
+                          Text(match['homeTeam']['shortName'],
+                              style: const TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold))
+                        ]),
+                    Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(2, 5, 2, 5),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10.0),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.3),
+                                  spreadRadius: 1,
+                                  blurRadius: 2,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: Text(
+                                ' ${match['score']['fullTime']['home']} - ${match['score']['fullTime']['away']} ',
+                                style: const TextStyle(
+                                    fontSize: 25, fontWeight: FontWeight.bold)),
+                          )
+                        ]),
+                    Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          SizedBox(
+                              height: 90.0,
+                              width: 90.0,
+                              child: crestAwayWidget),
+                          const SizedBox(height: 10.0),
+                          Text(match['awayTeam']['shortName'],
+                              style: const TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold)),
+                        ]),
+                  ],
+                ),
+                const Spacer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     match['referees'].isEmpty
                         ? const Text('Referee: TBA')
@@ -355,7 +396,7 @@ class _HomePageState extends State<HomePage>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Upcoming Matchs',
+                    'Matches',
                     style: TextStyle(
                       color: Colors.pink[800],
                       fontSize: 20.0,
@@ -364,17 +405,6 @@ class _HomePageState extends State<HomePage>
                   ),
                   TextButton(
                       onPressed: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => const AllMatchPage(),
-                        //   ),
-                        // ).then((value) {
-                        //   setState(() {
-                        //     futureUpcomingMatches = fetchUpcomingMatches();
-                        //     futureLiveMatches = fetchLiveMatches();
-                        //   });
-                        // });
                         Get.to(() => const AllMatchPage(),
                             transition: Transition.rightToLeft);
                       },
@@ -382,7 +412,6 @@ class _HomePageState extends State<HomePage>
                           style: TextStyle(color: Colors.black, fontSize: 15)))
                 ]),
           ),
-          const SizedBox(height: 10.0),
           Expanded(
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -453,7 +482,7 @@ class _HomePageState extends State<HomePage>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Upcoming Matchs',
+                              'Matches',
                               style: TextStyle(
                                 color: Colors.pink[800],
                                 fontSize: 20.0,
@@ -462,19 +491,6 @@ class _HomePageState extends State<HomePage>
                             ),
                             TextButton(
                                 onPressed: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) =>
-                                  //         const AllMatchPage(),
-                                  //   ),
-                                  // ).then((value) {
-                                  //   setState(() {
-                                  //     futureUpcomingMatches =
-                                  //         fetchUpcomingMatches();
-                                  //     futureLiveMatches = fetchLiveMatches();
-                                  //   });
-                                  // });
                                   Get.to(() => const AllMatchPage(),
                                       transition: Transition.rightToLeft);
                                 },
@@ -483,15 +499,18 @@ class _HomePageState extends State<HomePage>
                                         color: Colors.black, fontSize: 15)))
                           ]),
                     ),
-                    const SizedBox(height: 10.0),
                     Expanded(
                       child: ListView(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         scrollDirection: Axis.vertical,
                         children: List.generate(snapshot.data!.matches.length,
                                 (int index) {
-                              return _buildUpcomingMatchItem(
-                                  snapshot.data!.matches[index]);
+                              return snapshot.data!.matches[index]['status'] ==
+                                      'FINISHED'
+                                  ? _buildFinishedMatchItem(
+                                      snapshot.data!.matches[index])
+                                  : _buildUpcomingMatchItem(
+                                      snapshot.data!.matches[index]);
                             }) +
                             const [SizedBox(height: 100.0)],
                       ),
@@ -505,6 +524,135 @@ class _HomePageState extends State<HomePage>
                 style: TextStyle(fontWeight: FontWeight.bold));
           }
         });
+  }
+
+  Widget _buildFinishedMatchItem(Map<String, dynamic> match) {
+    String crestHomeUrl = 'https://corsproxy.io/?${match['homeTeam']['crest']}';
+    Widget crestHomeWidget;
+    String crestAwayUrl = 'https://corsproxy.io/?${match['awayTeam']['crest']}';
+    Widget crestAwayWidget;
+
+    if (crestHomeUrl.endsWith('.svg')) {
+      crestHomeWidget = SvgPicture.network(
+        crestHomeUrl,
+        width: 55,
+        height: 55,
+        fit: BoxFit.contain,
+      );
+    } else {
+      crestHomeWidget = Image.network(
+        crestHomeUrl,
+        width: 55,
+        height: 55,
+        fit: BoxFit.contain,
+      );
+    }
+
+    if (crestAwayUrl.endsWith('.svg')) {
+      crestAwayWidget = SvgPicture.network(
+        crestAwayUrl,
+        width: 55,
+        height: 55,
+        fit: BoxFit.contain,
+      );
+    } else {
+      crestAwayWidget = Image.network(
+        crestAwayUrl,
+        width: 55,
+        height: 55,
+        fit: BoxFit.contain,
+      );
+    }
+
+    return InkWell(
+      onTap: () => {print('Matches')},
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        color: Colors.white,
+        child: SizedBox(
+          width: 300.0,
+          height: 100.0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SizedBox(
+                width: 105,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(width: 55, height: 55, child: crestHomeWidget),
+                    const SizedBox(height: 5.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          match['homeTeam']['shortName'],
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('FT',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey)),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(2, 5, 2, 5),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(10.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 1,
+                          blurRadius: 2,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                        ' ${match['score']['fullTime']['home']} - ${match['score']['fullTime']['away']} ',
+                        style: const TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold)),
+                  ),
+                  const SizedBox(
+                    width: 90,
+                    height: 15,
+                  )
+                ],
+              ),
+              SizedBox(
+                width: 105,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(width: 55, height: 55, child: crestAwayWidget),
+                    const SizedBox(height: 5.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          match['awayTeam']['shortName'],
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildUpcomingMatchItem(Map<String, dynamic> match) {
@@ -550,7 +698,7 @@ class _HomePageState extends State<HomePage>
     }
 
     return InkWell(
-      onTap: () => {print('Upcoming Match')},
+      onTap: () => {print('Matches')},
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
