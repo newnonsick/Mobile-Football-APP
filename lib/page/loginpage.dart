@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:project/myhomepage.dart';
 import 'package:project/page/registerpage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -19,6 +20,12 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   bool isSecure = true;
+
+  @override
+  void initState() {
+    super.initState();
+    checkUserSession();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,6 +133,9 @@ class _LoginPageState extends State<LoginPage> {
                                         if (value!.isEmpty) {
                                           return 'Please enter your password';
                                         }
+                                        if (value.length < 6) {
+                                          return 'Password must be at least 6 characters';
+                                        }
                                         return null;
                                       },
                                       decoration: InputDecoration(
@@ -169,7 +179,16 @@ class _LoginPageState extends State<LoginPage> {
                                     final password = passwordController.text;
                                     final uid = await loginWithEmailAndPass(
                                         email, password);
-                                    if (uid != null) {
+                                    if (uid == null) {
+                                      return;
+                                    } else if (uid ==
+                                        'Invalid email or password') {
+                                      Get.snackbar(
+                                          'Error', 'Invalid email or password',
+                                          backgroundColor: Colors.red,
+                                          colorText: Colors.white);
+                                    } else {
+                                      await saveUserSession(uid);
                                       Get.off(() => const MyHomePage(),
                                           transition: Transition.fade);
                                     }
@@ -243,8 +262,11 @@ class _LoginPageState extends State<LoginPage> {
                               height: 60,
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  final user = await signInWithGoogle();
-                                  if (user != null) {
+                                  final userCredential =
+                                      await signInWithGoogle();
+                                  if (userCredential != null) {
+                                    await saveUserSession(
+                                        userCredential.user!.uid);
                                     Get.off(() => const MyHomePage(),
                                         transition: Transition.fade);
                                   }
@@ -312,5 +334,18 @@ class _LoginPageState extends State<LoginPage> {
       idToken: googleAuth.idToken,
     );
     return FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
+  Future<void> saveUserSession(String uid) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userUid', uid);
+  }
+
+  Future<void> checkUserSession() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userUid = prefs.getString('userUid');
+    if (userUid != null) {
+      Get.off(() => const MyHomePage(), transition: Transition.fade);
+    }
   }
 }

@@ -1,40 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
+import 'package:project/page/loginpage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfilePage extends StatelessWidget {
-  ProfilePage({Key? key}) : super(key: key);
-
-  final List<String> _items = [
-    'https://picsum.photos/250?image=33',
-    'https://picsum.photos/250?image=34',
-    'https://picsum.photos/250?image=35',
-    'https://picsum.photos/250?image=36',
-    'https://picsum.photos/250?image=37',
-    'https://picsum.photos/250?image=38',
-    'https://picsum.photos/250?image=39',
-    'https://picsum.photos/250?image=40',
-    'https://picsum.photos/250?image=41',
-    'https://picsum.photos/250?image=42',
-    'https://picsum.photos/250?image=43',
-    'https://picsum.photos/250?image=44',
-  ];
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: GridView.builder(
-        padding: const EdgeInsets.all(8),
-        itemCount: _items.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-        ),
-        itemBuilder: (context, index) {
-          return Image.network(
-            _items[index],
-            fit: BoxFit.cover,
-          );
+    return Center(
+      child: IconButton(
+        icon: const Icon(Icons.logout),
+        onPressed: () {
+          FirebaseAuth.instance.signOut();
+          SharedPreferences.getInstance().then((prefs) {
+            prefs.remove('userUid');
+          });
+          Get.offAll(() => const LoginPage(), curve: Curves.easeIn);
         },
       ),
     );

@@ -4,9 +4,9 @@ import 'package:project/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:project/page/loginpage.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  initializeFirebase();
+  await initializeFirebase();
   runApp(const MyApp());
 }
 

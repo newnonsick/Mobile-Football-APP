@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'all_match_page.dart';
@@ -25,6 +26,7 @@ class _HomePageState extends State<HomePage>
 
   bool liveLoaded = false;
   bool upcomingLoaded = false;
+  
 
   @override
   void initState() {
@@ -73,6 +75,10 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
+    if (FirebaseAuth.instance.currentUser != null) {
+      print(FirebaseAuth.instance.currentUser?.uid);
+    }
+
     return Container(
       color: Colors.white,
       child: Column(
