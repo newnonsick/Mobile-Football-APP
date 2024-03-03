@@ -51,7 +51,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: Image.asset(
-                    'assets/images/logo.jpg',
+                    'assets/images/logo.png',
                     width: MediaQuery.of(context).size.width * 0.4,
                     fit: BoxFit.contain,
                   ),
@@ -83,7 +83,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       ],
                                     ).createShader(bounds);
                                   },
-                                  child: const Text('Live Score',
+                                  child: const Text('LiveScore',
                                       style: TextStyle(
                                           fontSize: 30,
                                           fontWeight: FontWeight.bold,
@@ -212,7 +212,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                           backgroundColor: Colors.red,
                                           colorText: Colors.white);
                                     } else if (uid == 'Email already in use') {
-                                      Get.snackbar('Error', 'Email already in use',
+                                      Get.snackbar(
+                                          'Error', 'Email already in use',
                                           backgroundColor: Colors.red,
                                           colorText: Colors.white);
                                     } else {

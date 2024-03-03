@@ -24,7 +24,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    checkUserSession();
   }
 
   @override
@@ -57,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: Image.asset(
-                    'assets/images/logo.jpg',
+                    'assets/images/logo.png',
                     width: MediaQuery.of(context).size.width * 0.4,
                     fit: BoxFit.contain,
                   ),
@@ -89,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                                       ],
                                     ).createShader(bounds);
                                   },
-                                  child: const Text('Live Score',
+                                  child: const Text('LiveScore',
                                       style: TextStyle(
                                           fontSize: 30,
                                           fontWeight: FontWeight.bold,
@@ -341,11 +340,4 @@ class _LoginPageState extends State<LoginPage> {
     await prefs.setString('userUid', uid);
   }
 
-  Future<void> checkUserSession() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userUid = prefs.getString('userUid');
-    if (userUid != null) {
-      Get.off(() => const MyHomePage(), transition: Transition.fade);
-    }
-  }
 }
