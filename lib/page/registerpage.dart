@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:project/myhomepage.dart';
 import 'package:project/page/loginpage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -292,7 +294,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                 onPressed: () async {
                                   final user = await signInWithGoogle();
                                   if (user != null) {
-                                    Get.off(() => const LoginPage(),
+                                    await saveUserSession(user.user!.uid);
+                                    Get.off(() => const MyHomePage(),
                                         transition: Transition.fade);
                                   }
                                 },
@@ -361,5 +364,10 @@ class _RegisterPageState extends State<RegisterPage> {
       idToken: googleAuth.idToken,
     );
     return FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
+  Future<void> saveUserSession(String uid) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userUid', uid);
   }
 }
