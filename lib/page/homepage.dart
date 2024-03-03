@@ -527,6 +527,9 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget _buildFinishedMatchItem(Map<String, dynamic> match) {
+    DateTime utcDate = DateTime.parse(match['utcDate']);
+    String formattedDate = DateFormat('dd MMM yyyy').format(utcDate.toLocal());
+
     String crestHomeUrl = 'https://corsproxy.io/?${match['homeTeam']['crest']}';
     Widget crestHomeWidget;
     String crestAwayUrl = 'https://corsproxy.io/?${match['awayTeam']['crest']}';
@@ -605,7 +608,7 @@ class _HomePageState extends State<HomePage>
                           fontWeight: FontWeight.bold,
                           color: Colors.grey)),
                   Container(
-                    padding: const EdgeInsets.fromLTRB(2, 5, 2, 5),
+                    padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
                     decoration: BoxDecoration(
                       color: Colors.grey[100],
                       borderRadius: BorderRadius.circular(10.0),
@@ -623,10 +626,12 @@ class _HomePageState extends State<HomePage>
                         style: const TextStyle(
                             fontSize: 25, fontWeight: FontWeight.bold)),
                   ),
-                  const SizedBox(
-                    width: 90,
-                    height: 15,
-                  )
+                  const SizedBox(height: 5.0),
+                  Text(
+                    formattedDate,
+                    style: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.bold, color: Colors.grey),
+                  ),
                 ],
               ),
               SizedBox(

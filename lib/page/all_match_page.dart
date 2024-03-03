@@ -192,9 +192,10 @@ class _AllMatchPageState extends State<AllMatchPage>
                       : ['LIVE', 'IN_PLAY', 'PAUSED']
                               .contains(snapshot.data!.matches[index]['status'])
                           ? _buildLiveMatchItem(snapshot.data!.matches[index])
-                          : ['SCHEDULED', 'TIMED']
-                                  .contains(
-                                      snapshot.data!.matches[index]['status'])
+                          : [
+                              'SCHEDULED',
+                              'TIMED'
+                            ].contains(snapshot.data!.matches[index]['status'])
                               ? _buildUpcomingMatchItem(
                                   snapshot.data!.matches[index])
                               : const SizedBox.shrink();
@@ -211,6 +212,9 @@ class _AllMatchPageState extends State<AllMatchPage>
   }
 
   Widget _buildLiveMatchItem(Map<String, dynamic> match) {
+    DateTime utcDate = DateTime.parse(match['utcDate']);
+    String formattedDate = DateFormat('dd MMM yyyy').format(utcDate.toLocal());
+
     String crestHomeUrl = 'https://corsproxy.io/?${match['homeTeam']['crest']}';
     Widget crestHomeWidget;
     String crestAwayUrl = 'https://corsproxy.io/?${match['awayTeam']['crest']}';
@@ -297,9 +301,9 @@ class _AllMatchPageState extends State<AllMatchPage>
                           curve: Curves.easeInOut,
                           duration: 600.ms),
                   Container(
-                    padding: const EdgeInsets.all(2.0),
+                    padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Colors.grey[100],
                       borderRadius: BorderRadius.circular(10.0),
                       boxShadow: [
                         BoxShadow(
@@ -315,10 +319,14 @@ class _AllMatchPageState extends State<AllMatchPage>
                         style: const TextStyle(
                             fontSize: 25, fontWeight: FontWeight.bold)),
                   ),
-                  const SizedBox(
-                    width: 90,
-                    height: 15,
-                  )
+                  const SizedBox(height: 5.0),
+                  Text(
+                    formattedDate,
+                    style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey),
+                  ),
                 ],
               ),
               SizedBox(
@@ -348,6 +356,9 @@ class _AllMatchPageState extends State<AllMatchPage>
   }
 
   Widget _buildFinishedMatchItem(Map<String, dynamic> match) {
+    DateTime utcDate = DateTime.parse(match['utcDate']);
+    String formattedDate = DateFormat('dd MMM yyyy').format(utcDate.toLocal());
+
     String crestHomeUrl = 'https://corsproxy.io/?${match['homeTeam']['crest']}';
     Widget crestHomeWidget;
     String crestAwayUrl = 'https://corsproxy.io/?${match['awayTeam']['crest']}';
@@ -426,7 +437,7 @@ class _AllMatchPageState extends State<AllMatchPage>
                           fontWeight: FontWeight.bold,
                           color: Colors.grey)),
                   Container(
-                    padding: const EdgeInsets.fromLTRB(2, 5, 2, 5),
+                    padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
                     decoration: BoxDecoration(
                       color: Colors.grey[100],
                       borderRadius: BorderRadius.circular(10.0),
@@ -444,10 +455,14 @@ class _AllMatchPageState extends State<AllMatchPage>
                         style: const TextStyle(
                             fontSize: 25, fontWeight: FontWeight.bold)),
                   ),
-                  const SizedBox(
-                    width: 90,
-                    height: 15,
-                  )
+                  const SizedBox(height: 5.0),
+                  Text(
+                    formattedDate,
+                    style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey),
+                  ),
                 ],
               ),
               SizedBox(
