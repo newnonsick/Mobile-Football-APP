@@ -60,6 +60,8 @@ flutter_launcher_icons:
   android: true
   ios: true
   image_path: "assets/images/logo.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/images/logo_foreground.png"
 
 dev_dependencies:
   flutter_test:
@@ -92,6 +94,7 @@ flutter:
     - assets/images/unknwon_person.png
     - assets/images/q.png
     - assets/images/logo.png
+    - assets/images/logo_foreground.png
     - assets/images/logo960x960.png
     - assets/images/google_logo.png
 
