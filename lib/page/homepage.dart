@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:project/page/matchinfopage.dart';
 import 'package:project/widget/finishedmatchitem.dart';
@@ -10,7 +9,6 @@ import 'package:project/widget/upcomingmatchitem.dart';
 import 'all_match_page.dart';
 import '../api/upcomingmatches_api.dart';
 import '../api/livematches_api.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 

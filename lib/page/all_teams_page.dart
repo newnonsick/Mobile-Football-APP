@@ -228,7 +228,6 @@ class _AllTeamsPageState extends State<AllTeamsPage>
                                             'uid': FirebaseAuth
                                                 .instance.currentUser!.uid,
                                             'teamId': team['id'],
-                                            'teamName': team['shortName'],
                                           })
                                           .then((value) =>
                                               FirebaseFirestore.instance.collection('matches').where('awayTeamId', isEqualTo: team['id']).where('status', isEqualTo: 'TIMED').get().then(
