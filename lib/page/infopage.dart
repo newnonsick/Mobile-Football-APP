@@ -39,7 +39,7 @@ class _InfoPageState extends State<InfoPage> {
                 ),
               ),
               Tab(
-                child: Text('Teams', style: TextStyle(color: Colors.pink[800], fontWeight: FontWeight.bold),),),
+                child: Text('Clubs', style: TextStyle(color: Colors.pink[800], fontWeight: FontWeight.bold),),),
               Tab(
                 icon: Icon(
                   Icons.search,
