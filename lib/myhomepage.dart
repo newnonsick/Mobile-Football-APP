@@ -46,58 +46,29 @@ class _MyHomePageState extends State<MyHomePage> {
         elevation: 0,
       ),
       // body: _selectedIndex == 0 ? _useStack() : _useColumn(),
-      body: _useStack(),
+      body: _useColumn(),
     );
   }
 
-  Widget _useStack() {
-    return Stack(
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: _pages[_selectedIndex],
-            ),
-          ],
-        ),
-        Positioned(
-          left: 10,
-          right: 10,
-          bottom: 10,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 20,
-                  spreadRadius: 3,
-                ),
-              ],
-            ),
-            child: CustomNavigationBar(
-              selectedIndex: _selectedIndex,
-              onItemTapped: _onItemTapped,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  // Widget _useColumn() {
-  //   return Center(
-  //     child: Column(
-  //       mainAxisAlignment: MainAxisAlignment.end,
-  //       children: [
-  //         Expanded(
-  //           child: _pages[_selectedIndex],
-  //         ),
-  //         Container(
+  // Widget _useStack() {
+  //   return Stack(
+  //     children: [
+  //       Column(
+  //         crossAxisAlignment: CrossAxisAlignment.stretch,
+  //         children: [
+  //           Expanded(
+  //             child: _pages[_selectedIndex],
+  //           ),
+  //         ],
+  //       ),
+  //       Positioned(
+  //         left: 10,
+  //         right: 10,
+  //         bottom: 10,
+  //         child: Container(
   //           decoration: BoxDecoration(
   //             color: Colors.white,
+  //             borderRadius: BorderRadius.circular(20),
   //             boxShadow: [
   //               BoxShadow(
   //                 color: Colors.black.withOpacity(0.1),
@@ -111,8 +82,37 @@ class _MyHomePageState extends State<MyHomePage> {
   //             onItemTapped: _onItemTapped,
   //           ),
   //         ),
-  //       ],
-  //     ),
+  //       ),
+  //     ],
   //   );
   // }
+
+  Widget _useColumn() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Expanded(
+            child: _pages[_selectedIndex],
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 20,
+                  spreadRadius: 3,
+                ),
+              ],
+            ),
+            child: CustomNavigationBar(
+              selectedIndex: _selectedIndex,
+              onItemTapped: _onItemTapped,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

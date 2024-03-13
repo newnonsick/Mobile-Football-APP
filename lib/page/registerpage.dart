@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -294,9 +296,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 onPressed: () async {
                                   final user = await signInWithGoogle();
                                   if (user != null) {
-                                    await saveUserSession(user.user!.uid);
-                                    Get.off(() => const MyHomePage(),
-                                        transition: Transition.fade);
+                                    login(user.user!.uid);
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -369,5 +369,35 @@ class _RegisterPageState extends State<RegisterPage> {
   Future<void> saveUserSession(String uid) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('userUid', uid);
+  }
+
+  void login(String uid) async {
+    QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('uid', isEqualTo: uid)
+        .get();
+
+
+    if (userSnapshot.docs.isEmpty) {
+      var db = FirebaseFirestore.instance.collection('users');
+      var token = await getFcmToken();
+      db.add({
+        'uid': uid,
+        'fcmTokens': [token],
+      });
+    } else {
+      var db = FirebaseFirestore.instance.collection('users');
+      var token = await getFcmToken();
+      db.doc(userSnapshot.docs[0].id).update({
+        'fcmTokens': FieldValue.arrayUnion([token]),
+      });
+    }
+    await saveUserSession(uid);
+    Get.off(() => const MyHomePage(), transition: Transition.fade);
+  }
+
+  Future<String> getFcmToken() async {
+    final token = await FirebaseMessaging.instance.getToken();
+    return token!;
   }
 }

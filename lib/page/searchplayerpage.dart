@@ -96,7 +96,6 @@ class _SearchPlayerPageState extends State<SearchPlayerPage> {
                   children: [
                     for (var player in snapshot.data!.hits['hit'])
                       _buildPlayerItem(player['response']),
-                    const SizedBox(height: 100),
                   ],
                 ));
               } else {

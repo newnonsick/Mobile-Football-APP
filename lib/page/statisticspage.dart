@@ -165,8 +165,7 @@ class _StatisticsPageState extends State<StatisticsPage>
                             for (var scorer in topGoalScorers)
                               _buildTopScorersItem(
                                   scorer, goals, mostGoalScorerCount)
-                          ] +
-                          [const SizedBox(height: 100.0)])
+                          ])
                 ],
               ),
             ),

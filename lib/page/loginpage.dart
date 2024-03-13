@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +7,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:project/myhomepage.dart';
 import 'package:project/page/registerpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -187,9 +189,7 @@ class _LoginPageState extends State<LoginPage> {
                                           backgroundColor: Colors.red,
                                           colorText: Colors.white);
                                     } else {
-                                      await saveUserSession(uid);
-                                      Get.off(() => const MyHomePage(),
-                                          transition: Transition.fade);
+                                      login(uid);
                                     }
                                   }
                                 },
@@ -264,10 +264,7 @@ class _LoginPageState extends State<LoginPage> {
                                   final userCredential =
                                       await signInWithGoogle();
                                   if (userCredential != null) {
-                                    await saveUserSession(
-                                        userCredential.user!.uid);
-                                    Get.off(() => const MyHomePage(),
-                                        transition: Transition.fade);
+                                    login(userCredential.user!.uid);
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -301,6 +298,36 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  Future<String> getFcmToken() async {
+    final token = await FirebaseMessaging.instance.getToken();
+    return token!;
+  }
+
+  void login(String uid) async {
+    QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('uid', isEqualTo: uid)
+        .get();
+
+
+    if (userSnapshot.docs.isEmpty) {
+      var db = FirebaseFirestore.instance.collection('users');
+      var token = await getFcmToken();
+      db.add({
+        'uid': uid,
+        'fcmTokens': [token],
+      });
+    }else{
+      var db = FirebaseFirestore.instance.collection('users');
+      var token = await getFcmToken();
+      db.doc(userSnapshot.docs[0].id).update({
+        'fcmTokens': FieldValue.arrayUnion([token]),
+      });
+    }
+    await saveUserSession(uid);
+    Get.off(() => const MyHomePage(), transition: Transition.fade);
   }
 
   Widget toggleSecure() {
@@ -339,5 +366,4 @@ class _LoginPageState extends State<LoginPage> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('userUid', uid);
   }
-
 }
