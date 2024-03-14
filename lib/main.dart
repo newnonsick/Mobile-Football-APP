@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
@@ -5,6 +7,8 @@ import 'package:project/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:project/myhomepage.dart';
 import 'package:project/page/loginpage.dart';
+import 'package:project/provider/coins_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -25,13 +29,12 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp>  {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   @override
   void initState() {
     super.initState();
-
     _firebaseMessaging.requestPermission();
     _firebaseMessaging.getToken().then((token) {
       print('Token: $token');
@@ -47,6 +50,13 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
       future: _isUserLoggedIn(),
@@ -54,10 +64,14 @@ class _MyAppState extends State<MyApp> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
         } else {
-          return GetMaterialApp(
-            home:
-                snapshot.data == true ? const MyHomePage() : const LoginPage(),
-            debugShowCheckedModeBanner: false,
+          return ChangeNotifierProvider(
+            create: (context) => CoinModel(),
+            child: GetMaterialApp(
+              home: snapshot.data == true
+                  ? const MyHomePage()
+                  : const LoginPage(),
+              debugShowCheckedModeBanner: false,
+            ),
           );
         }
       },

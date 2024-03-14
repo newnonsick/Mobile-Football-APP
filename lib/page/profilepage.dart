@@ -10,6 +10,8 @@ import 'package:intl/intl.dart';
 import 'package:project/api/matchbyid_api.dart';
 import 'package:project/page/loginpage.dart';
 import 'package:project/page/matchinfopage.dart';
+import 'package:project/provider/coins_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -24,8 +26,78 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-      child: Column(
-          children: [_buildMatchFollowingsSection(), _buildSignOutSection()]),
+      child: Container(
+        color: Colors.white,
+        child: Column(children: [
+          _buildCoinsSection(),
+          _buildMatchFollowingsSection(),
+          _buildSignOutSection()
+        ]),
+      ),
+    );
+  }
+
+  Widget _buildCoinsSection() {
+    return Consumer<CoinModel>(
+      builder: (context, model, child) => InkWell(
+        onTap: () {
+          showModalBottomSheet(
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              context: context,
+              builder: (context) => _buildCoinsSheet());
+        },
+        child: Row(children: [
+          Icon(
+            Icons.monetization_on,
+            color: Colors.pink[800],
+            size: 30,
+          ),
+          const SizedBox(
+            width: 20,
+            height: 50,
+          ),
+          Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 5,
+                    spreadRadius: 0.5,
+                  ),
+                ],
+              ),
+              child: RichText(
+                text: TextSpan(
+                  text: '${model.coins.toString()}.00',
+                  style: TextStyle(
+                    color: Colors.pink[800],
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )),
+          const SizedBox(
+            width: 10,
+          ),
+          const Text('coins',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 17,
+              )),
+          const Spacer(),
+          const Icon(
+            Icons.arrow_forward_ios,
+            size: 17,
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+        ]),
+      ),
     );
   }
 
@@ -114,6 +186,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 .update({
               'fcmTokens': FieldValue.arrayRemove([fcmToken]),
             }).then((_) async {
+              await _updateCoinsInFirestore(
+                  Provider.of<CoinModel>(context, listen: false).coins);
               await FirebaseAuth.instance.signOut();
               await GoogleSignIn().signOut();
               SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -142,6 +216,22 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
     );
+  }
+
+  Future<void> _updateCoinsInFirestore(int coins) async {
+    try {
+      final dbUser = await FirebaseFirestore.instance
+          .collection('users')
+          .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      if (dbUser.docs.isNotEmpty) {
+        await dbUser.docs[0].reference.update({'coins': coins});
+        print('Coins updated in Firestore3');
+      }
+    } catch (error) {
+      print('Error updating coin count in Firestore: $error');
+    }
   }
 
   Future<String> getFcmToken() async {
@@ -198,19 +288,47 @@ class _ProfilePageState extends State<ProfilePage> {
               const SizedBox(height: 20),
               Expanded(
                 child: ListView(
-                  controller: controllers,
-                  children: matchData.matches.isNotEmpty
-                      ? matchData.matches
-                          .map<Widget>((match) => _buildMatchItem(match))
-                          .toList()
-                      : []
-                ),
+                    controller: controllers,
+                    children: matchData.matches.isNotEmpty
+                        ? matchData.matches
+                            .map<Widget>((match) => _buildMatchItem(match))
+                            .toList()
+                        : []),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildCoinsSheet() {
+    return makeDismissible(
+        child: DraggableScrollableSheet(
+            initialChildSize: 0.6,
+            minChildSize: 0.3,
+            maxChildSize: 0.8,
+            builder: (_, controllers) => Container(
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                    color: Colors.white,
+                  ),
+                  padding: const EdgeInsets.all(20),
+                  child: ListView(
+                    controller: controllers,
+                    children: const [
+                      Text('Coins',
+                      textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ],
+                  ),
+                )));
   }
 
   Widget _buildMatchItem(Map<String, dynamic> match) {

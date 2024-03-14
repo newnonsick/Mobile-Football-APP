@@ -318,6 +318,7 @@ class _LoginPageState extends State<LoginPage> {
       db.add({
         'uid': uid,
         'fcmTokens': [token],
+        'coins': 0,
       });
     }else{
       var db = FirebaseFirestore.instance.collection('users');

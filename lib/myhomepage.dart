@@ -1,8 +1,13 @@
+import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:project/page/homepage.dart';
 import 'package:project/page/infopage.dart';
 import 'package:project/page/profilepage.dart';
+import 'package:project/provider/coins_provider.dart';
 import 'package:project/widget/custom_navigationbar.dart';
+import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -11,8 +16,64 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   int _selectedIndex = 0;
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    startCoinsTimer();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  Future<void> dispose() async {
+    _timer.cancel();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      await _updateCoinsInFirestore();
+      _timer.cancel();
+    } else if (state == AppLifecycleState.resumed) {
+      startCoinsTimer();
+    }
+  }
+
+  void startCoinsTimer() {
+    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
+      _addCoins();
+      print('Coins: ${Provider.of<CoinModel>(context, listen: false).coins}');
+    });
+  }
+
+  Future<void> _updateCoinsInFirestore() async {
+    try {
+      final coinsModel = Provider.of<CoinModel>(context, listen: false);
+      final coins = coinsModel.coins;
+
+      final dbUser = await FirebaseFirestore.instance
+          .collection('users')
+          .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      if (dbUser.docs.isNotEmpty) {
+        await dbUser.docs[0].reference.update({'coins': coins});
+      }
+    } catch (error) {
+      print('Error updating coin count in Firestore: $error');
+    }
+  }
+
+  void _addCoins() {
+    Provider.of<CoinModel>(context, listen: false).increment();
+  }
 
   void _onItemTapped(int index) {
     if (_selectedIndex != index) {

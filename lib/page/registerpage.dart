@@ -384,6 +384,7 @@ class _RegisterPageState extends State<RegisterPage> {
       db.add({
         'uid': uid,
         'fcmTokens': [token],
+        'coins': 0,
       });
     } else {
       var db = FirebaseFirestore.instance.collection('users');
