@@ -3,11 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:project/myhomepage.dart';
 import 'package:project/page/loginpage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:project/page/setusernamepage.dart';
+import 'package:project/utils/showtoast.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -211,15 +213,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                     final uid = await registerWithEmailAndPass(
                                         email, password);
                                     if (uid == null) {
-                                      Get.snackbar(
-                                          'Error', 'Failed to register',
-                                          backgroundColor: Colors.red,
-                                          colorText: Colors.white);
+                                      ShowToast.show('Failed to register', Colors.red, Colors.white, ToastGravity.BOTTOM);
                                     } else if (uid == 'Email already in use') {
-                                      Get.snackbar(
-                                          'Error', 'Email already in use',
-                                          backgroundColor: Colors.red,
-                                          colorText: Colors.white);
+                                      ShowToast.show('Email already in use', Colors.red, Colors.white, ToastGravity.BOTTOM);
                                     } else {
                                       Get.off(() => const LoginPage(),
                                           transition: Transition.fade);
@@ -346,6 +342,7 @@ class _RegisterPageState extends State<RegisterPage> {
         email: email,
         password: password,
       );
+      // await credential.user!.updateDisplayName(username);
       return credential.user?.uid;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
@@ -366,17 +363,12 @@ class _RegisterPageState extends State<RegisterPage> {
     return FirebaseAuth.instance.signInWithCredential(credential);
   }
 
-  Future<void> saveUserSession(String uid) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('userUid', uid);
-  }
 
   void login(String uid) async {
     QuerySnapshot userSnapshot = await FirebaseFirestore.instance
         .collection('users')
         .where('uid', isEqualTo: uid)
         .get();
-
 
     if (userSnapshot.docs.isEmpty) {
       var db = FirebaseFirestore.instance.collection('users');
@@ -385,20 +377,38 @@ class _RegisterPageState extends State<RegisterPage> {
         'uid': uid,
         'fcmTokens': [token],
         'coins': 0,
+        'username': FirebaseAuth.instance.currentUser!.displayName ?? '',
+        'guessedCorrect': 0,
+        'guessedWrong': 0,
+        'correctStreak': 0,
       });
     } else {
       var db = FirebaseFirestore.instance.collection('users');
       var token = await getFcmToken();
       db.doc(userSnapshot.docs[0].id).update({
         'fcmTokens': FieldValue.arrayUnion([token]),
+        'username': FirebaseAuth.instance.currentUser!.displayName ?? '',
       });
     }
-    await saveUserSession(uid);
-    Get.off(() => const MyHomePage(), transition: Transition.fade);
+
+    if (_isUserAlreadySetUsername()) {
+      Get.off(() => const MyHomePage(), transition: Transition.rightToLeft);
+    } else {
+      Get.off(() => const SetUsernamePage(),
+          transition: Transition.rightToLeft);
+    }
   }
 
   Future<String> getFcmToken() async {
     final token = await FirebaseMessaging.instance.getToken();
     return token!;
+  }
+
+  bool _isUserAlreadySetUsername() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      return user.displayName != null && user.displayName!.isNotEmpty;
+    }
+    return false;
   }
 }

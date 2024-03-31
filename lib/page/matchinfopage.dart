@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:project/widget/pictureliveandfinish.dart';
+import 'package:project/widget/pictureupcoming.dart';
+import 'package:project/widget/sharesheet.dart';
 
 class MatchInfoPage extends StatefulWidget {
   final Map match;
@@ -22,7 +25,6 @@ class _MatchInfoPageState extends State<MatchInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         appBar: AppBar(),
         body: Padding(
@@ -31,7 +33,7 @@ class _MatchInfoPageState extends State<MatchInfoPage> {
             children: [
               _buildTopSection(),
               const SizedBox(height: 10),
-              Spacer(),
+              const Spacer(),
               _buildfooterSection()
             ],
           ),
@@ -46,7 +48,7 @@ class _MatchInfoPageState extends State<MatchInfoPage> {
             Container(
               height: MediaQuery.of(context).size.height / 3,
               decoration: const BoxDecoration(
-                color: Colors.black,
+                  color: Colors.black,
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(20),
                       bottomRight: Radius.circular(20))),
@@ -74,10 +76,16 @@ class _MatchInfoPageState extends State<MatchInfoPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    backgroundColor: Colors.pink[800],
+                    backgroundColor: widget.match['status'] == 'FINISHED'
+                        ? Colors.grey
+                        : Colors.pink[800],
                     foregroundColor: Colors.white,
                   ),
                   onPressed: () async {
+                    if (widget.match['status'] == 'FINISHED') {
+                      return;
+                    }
+
                     if (isFollowing) {
                       FirebaseFirestore.instance
                           .collection('followedMatch')
@@ -105,7 +113,8 @@ class _MatchInfoPageState extends State<MatchInfoPage> {
                         }
                       }).then((value) {
                         setState(() {
-                          _isFollowingFuture = _checkIfFollowing(widget.match['id']);
+                          _isFollowingFuture =
+                              _checkIfFollowing(widget.match['id']);
                         });
                       });
                     } else {
@@ -119,7 +128,8 @@ class _MatchInfoPageState extends State<MatchInfoPage> {
                         'byUser': true,
                       }).then((value) {
                         setState(() {
-                          _isFollowingFuture = _checkIfFollowing(widget.match['id']);
+                          _isFollowingFuture =
+                              _checkIfFollowing(widget.match['id']);
                         });
                       });
                     }
@@ -130,14 +140,27 @@ class _MatchInfoPageState extends State<MatchInfoPage> {
                       : const Text('Follow Match',
                           style: TextStyle(fontSize: 20))),
             ),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.share), color: Colors.pink[800], iconSize: 30,)
+            IconButton(
+              onPressed: () {
+                showModalBottomSheet(
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    context: context,
+                    builder: (context) => widget.match['status'] == 'TIMED'
+                        ? ShareSheet(
+                            child: PictureUpcoming(match: widget.match))
+                        : ShareSheet(
+                            child: PictureLiveAndFinish(match: widget.match)));
+              },
+              icon: const Icon(Icons.share),
+              color: Colors.pink[800],
+              iconSize: 30,
+            )
           ]);
         }
       },
     );
   }
-
-  
 
   Future<bool> _checkIfFollowing(int matchId) async {
     final querySnapshot = await FirebaseFirestore.instance

@@ -41,7 +41,7 @@ class _StandingPageState extends State<StandingPage> {
 
   @override
   void dispose() {
-    socket.dispose();
+    socket.disconnect();
     super.dispose();
   }
 

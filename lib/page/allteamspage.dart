@@ -54,6 +54,7 @@ class _AllTeamsPageState extends State<AllTeamsPage>
   @override
   void dispose() {
     _loadingController.dispose();
+    socket.disconnect();
     super.dispose();
   }
 
@@ -137,8 +138,7 @@ class _AllTeamsPageState extends State<AllTeamsPage>
                     ),
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  child: Container(
-                    padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(10.0),
                     child: Column(
                       children: [
                         ClipRRect(
@@ -372,7 +372,6 @@ class _AllTeamsPageState extends State<AllTeamsPage>
                     ),
                   ),
                 ),
-              ),
             );
           }
         });

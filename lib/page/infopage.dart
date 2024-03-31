@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project/page/all_teams_page.dart';
+import 'package:project/page/allteamspage.dart';
 import 'package:project/page/searchplayerpage.dart';
 import 'package:project/page/standingpage.dart';
 import 'package:project/page/statisticspage.dart';

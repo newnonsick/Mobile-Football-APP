@@ -163,51 +163,54 @@ class _SearchPlayerPageState extends State<SearchPlayerPage> {
           );
         }
       },
-      child: Card(
-        color: Colors.white,
-        child: SizedBox(
-            height: 100,
-            child: Row(children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
-                child: CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.pink[800],
-                    child: image),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      player['name']['display'],
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    player['currentTeam'] != null
-                        ? Row(
-                            children: [
-                              teamImage,
-                              const SizedBox(width: 5),
-                              Text(
-                                player['currentTeam']['shortName'],
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          )
-                        : const SizedBox(),
-                  ],
+      child: Hero(
+        tag: player['altIds']['opta'],
+        child: Card(
+          color: Colors.white,
+          child: SizedBox(
+              height: 100,
+              child: Row(children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
+                  child: CircleAvatar(
+                      radius: 30,
+                      backgroundColor: Colors.pink[800],
+                      child: image),
                 ),
-              ),
-            ])),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        player['name']['display'],
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      player['currentTeam'] != null
+                          ? Row(
+                              children: [
+                                teamImage,
+                                const SizedBox(width: 5),
+                                Text(
+                                  player['currentTeam']['shortName'],
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : const SizedBox(),
+                    ],
+                  ),
+                ),
+              ])),
+        ),
       ),
     );
   }

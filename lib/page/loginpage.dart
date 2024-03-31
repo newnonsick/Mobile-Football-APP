@@ -2,12 +2,14 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:project/myhomepage.dart';
 import 'package:project/page/registerpage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:project/page/setusernamepage.dart';
+import 'package:project/utils/showtoast.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -184,10 +186,11 @@ class _LoginPageState extends State<LoginPage> {
                                       return;
                                     } else if (uid ==
                                         'Invalid email or password') {
-                                      Get.snackbar(
-                                          'Error', 'Invalid email or password',
-                                          backgroundColor: Colors.red,
-                                          colorText: Colors.white);
+                                      ShowToast.show(
+                                          'Invalid email or password',
+                                          Colors.red,
+                                          Colors.white,
+                                          ToastGravity.BOTTOM);
                                     } else {
                                       login(uid);
                                     }
@@ -311,7 +314,6 @@ class _LoginPageState extends State<LoginPage> {
         .where('uid', isEqualTo: uid)
         .get();
 
-
     if (userSnapshot.docs.isEmpty) {
       var db = FirebaseFirestore.instance.collection('users');
       var token = await getFcmToken();
@@ -319,16 +321,26 @@ class _LoginPageState extends State<LoginPage> {
         'uid': uid,
         'fcmTokens': [token],
         'coins': 0,
+        'username': FirebaseAuth.instance.currentUser!.displayName ?? '',
+        'guessedCorrect': 0,
+        'guessedWrong': 0,
+        'correctStreak': 0,
       });
-    }else{
+    } else {
       var db = FirebaseFirestore.instance.collection('users');
       var token = await getFcmToken();
       db.doc(userSnapshot.docs[0].id).update({
         'fcmTokens': FieldValue.arrayUnion([token]),
+        'username': FirebaseAuth.instance.currentUser!.displayName ?? '',
       });
     }
-    await saveUserSession(uid);
-    Get.off(() => const MyHomePage(), transition: Transition.fade);
+
+    if (_isUserAlreadySetUsername()) {
+      Get.off(() => const MyHomePage(), transition: Transition.rightToLeft);
+    } else {
+      Get.off(() => const SetUsernamePage(),
+          transition: Transition.rightToLeft);
+    }
   }
 
   Widget toggleSecure() {
@@ -345,7 +357,9 @@ class _LoginPageState extends State<LoginPage> {
       );
       return credential.user?.uid;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
+      if (e.code == 'user-not-found' ||
+          e.code == 'wrong-password' ||
+          e.code == 'invalid-credential') {
         return 'Invalid email or password';
       }
       return null;
@@ -363,8 +377,11 @@ class _LoginPageState extends State<LoginPage> {
     return FirebaseAuth.instance.signInWithCredential(credential);
   }
 
-  Future<void> saveUserSession(String uid) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('userUid', uid);
+  bool _isUserAlreadySetUsername() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      return user.displayName != null && user.displayName!.isNotEmpty;
+    }
+    return false;
   }
 }

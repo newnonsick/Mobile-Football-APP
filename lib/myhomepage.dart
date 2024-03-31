@@ -8,6 +8,7 @@ import 'package:project/page/profilepage.dart';
 import 'package:project/provider/coins_provider.dart';
 import 'package:project/widget/custom_navigationbar.dart';
 import 'package:provider/provider.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -19,12 +20,24 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   int _selectedIndex = 0;
   late Timer _timer;
+  late io.Socket socket;
 
   @override
   void initState() {
     super.initState();
     startCoinsTimer();
     WidgetsBinding.instance.addObserver(this);
+    socket = io.io('http://132.145.68.135:6010/', <String, dynamic>{
+      'transports': ['websocket'],
+      'autoConnect': false,
+    });
+
+    socket.on('sync_coin', (data) {
+      _updateCoinsInFirestore();
+    });
+
+    socket.connect();
+
   }
 
   @override
@@ -42,14 +55,14 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       await _updateCoinsInFirestore();
       _timer.cancel();
     } else if (state == AppLifecycleState.resumed) {
-      startCoinsTimer();
+      await startCoinsTimer();
     }
   }
 
-  void startCoinsTimer() {
+  Future<void> startCoinsTimer() async {
+    await Provider.of<CoinModel>(context, listen: false).fetchCoin();
     _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
       _addCoins();
-      print('Coins: ${Provider.of<CoinModel>(context, listen: false).coins}');
     });
   }
 

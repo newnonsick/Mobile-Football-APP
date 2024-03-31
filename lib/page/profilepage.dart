@@ -11,8 +11,8 @@ import 'package:project/api/matchbyid_api.dart';
 import 'package:project/page/loginpage.dart';
 import 'package:project/page/matchinfopage.dart';
 import 'package:project/provider/coins_provider.dart';
+import 'package:project/widget/makedismissible.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -190,8 +190,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   Provider.of<CoinModel>(context, listen: false).coins);
               await FirebaseAuth.instance.signOut();
               await GoogleSignIn().signOut();
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              await prefs.remove('userUid');
               Get.offAll(() => const LoginPage(), curve: Curves.easeIn);
             });
           }
@@ -239,16 +237,6 @@ class _ProfilePageState extends State<ProfilePage> {
     return token!;
   }
 
-  Widget makeDismissible({required Widget child}) {
-    return GestureDetector(
-      onTap: () => Get.back(),
-      child: Material(
-        color: Colors.transparent,
-        child: child,
-      ),
-    );
-  }
-
   Future<Widget> _buildMatchFollowingsSheet() async {
     final querySnapshot = await FirebaseFirestore.instance
         .collection('followedMatch')
@@ -264,10 +252,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
     final matchData = await fetchMatchByID(matchIds);
 
-    return makeDismissible(
+    return MakeDismissible(
       child: DraggableScrollableSheet(
         initialChildSize: 0.6,
-        minChildSize: 0.3,
+        minChildSize: 0.2,
         maxChildSize: 0.8,
         builder: (_, controllers) => Container(
           decoration: const BoxDecoration(
@@ -303,10 +291,10 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildCoinsSheet() {
-    return makeDismissible(
+    return MakeDismissible(
         child: DraggableScrollableSheet(
             initialChildSize: 0.6,
-            minChildSize: 0.3,
+            minChildSize: 0.2,
             maxChildSize: 0.8,
             builder: (_, controllers) => Container(
                   decoration: const BoxDecoration(

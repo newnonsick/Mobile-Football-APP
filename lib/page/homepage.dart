@@ -1,15 +1,13 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
-import 'package:project/page/matchinfopage.dart';
 import 'package:project/widget/finishedmatchitem.dart';
+import 'package:project/widget/livematchitem.dart';
 import 'package:project/widget/upcomingmatchitem.dart';
-import 'all_match_page.dart';
+import 'allmatchpage.dart';
 import '../api/upcomingmatches_api.dart';
 import '../api/livematches_api.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class HomePage extends StatefulWidget {
@@ -102,14 +100,13 @@ class _HomePageState extends State<HomePage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+            const Padding(
+              padding: EdgeInsets.only(left: 20.0, right: 20.0),
               child: Text(
                 'Live Match',
                 style: TextStyle(
-                  color: Colors.pink[800],
+                  color: Colors.black,
                   fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -190,14 +187,13 @@ class _HomePageState extends State<HomePage>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
                       child: Text(
                         'Live Match',
                         style: TextStyle(
-                            color: Colors.pink[800],
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold),
+                            color: Colors.black,
+                            fontSize: 20.0,),
                       ),
                     ),
                     const SizedBox(height: 10.0),
@@ -211,8 +207,8 @@ class _HomePageState extends State<HomePage>
                         scrollDirection: Axis.horizontal,
                         itemCount: snapshot.data!.matches.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return _buildLiveMatchItem(
-                              snapshot.data!.matches[index]);
+                          return LiveMatchItem(
+                              match: snapshot.data!.matches[index]);
                         },
                       ),
                     ),
@@ -229,172 +225,6 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget _buildLiveMatchItem(Map<String, dynamic> match) {
-    String crestHomeUrl = 'https://corsproxy.io/?${match['homeTeam']['crest']}';
-    Widget crestHomeWidget;
-    String crestAwayUrl = 'https://corsproxy.io/?${match['awayTeam']['crest']}';
-    Widget crestAwayWidget;
-
-    if (crestHomeUrl.endsWith('.svg')) {
-      crestHomeWidget = SvgPicture.network(
-        crestHomeUrl,
-        width: 90,
-        height: 90,
-        fit: BoxFit.contain,
-      );
-    } else {
-      crestHomeWidget = Image.network(
-        crestHomeUrl,
-        width: 90,
-        height: 90,
-        fit: BoxFit.contain,
-      );
-    }
-
-    if (crestAwayUrl.endsWith('.svg')) {
-      crestAwayWidget = SvgPicture.network(
-        crestAwayUrl,
-        width: 90,
-        height: 90,
-        fit: BoxFit.contain,
-      );
-    } else {
-      crestAwayWidget = Image.network(
-        crestAwayUrl,
-        width: 90,
-        height: 90,
-        fit: BoxFit.contain,
-      );
-    }
-
-    return InkWell(
-      onTap: () => {
-        Get.to(
-          () => MatchInfoPage(
-            match: match,
-          ),
-          transition: Transition.rightToLeft,
-        )
-      },
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        color: Colors.white,
-        child: SizedBox(
-            width: 300.0,
-            height: 250.0,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 20, 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Row(
-                        children: [
-                          const Text('LIVE',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13,
-                                  color: Color.fromRGBO(0, 100, 0, 1))),
-                          const SizedBox(width: 5.0),
-                          Container(
-                            height: 10.0,
-                            width: 10.0,
-                            decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                shape: BoxShape.circle),
-                          )
-                        ],
-                      )
-                          .animate(
-                              onPlay: (controller) =>
-                                  controller.repeat(reverse: true))
-                          .tint(
-                              color: const Color.fromRGBO(0, 100, 0, 1),
-                              delay: 1000.ms,
-                              curve: Curves.easeInOut,
-                              duration: 600.ms)
-                    ],
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          SizedBox(
-                              height: 90.0,
-                              width: 90.0,
-                              child: crestHomeWidget),
-                          const SizedBox(height: 10.0),
-                          Text(match['homeTeam']['shortName'],
-                              style: const TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold))
-                        ]),
-                    Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(2, 5, 2, 5),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10.0),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  spreadRadius: 1,
-                                  blurRadius: 2,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: Text(
-                                ' ${match['score']['fullTime']['home']} - ${match['score']['fullTime']['away']} ',
-                                style: const TextStyle(
-                                    fontSize: 25, fontWeight: FontWeight.bold)),
-                          )
-                        ]),
-                    Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          SizedBox(
-                              height: 90.0,
-                              width: 90.0,
-                              child: crestAwayWidget),
-                          const SizedBox(height: 10.0),
-                          Text(match['awayTeam']['shortName'],
-                              style: const TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold)),
-                        ]),
-                  ],
-                ),
-                const Spacer(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    match['referees'].isEmpty
-                        ? const Text('Referee: TBA')
-                        : Text('Referee: ${match['referees'][0]['name']}',
-                            style: const TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                const SizedBox(height: 10.0),
-              ],
-            )),
-      ),
-    );
-  }
-
   Widget _buildLoadingUpcomingMatch() {
     return Expanded(
       child: Column(
@@ -405,12 +235,11 @@ class _HomePageState extends State<HomePage>
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     'Matches',
                     style: TextStyle(
-                      color: Colors.pink[800],
+                      color: Colors.black,
                       fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   TextButton(
@@ -418,8 +247,9 @@ class _HomePageState extends State<HomePage>
                         Get.to(() => const AllMatchPage(),
                             transition: Transition.rightToLeft);
                       },
-                      child: const Text('See All',
-                          style: TextStyle(color: Colors.black, fontSize: 15)))
+                      child: Text('See All',
+                          style:
+                              TextStyle(color: Colors.pink[800], fontSize: 15)))
                 ]),
           ),
           Expanded(
@@ -490,12 +320,11 @@ class _HomePageState extends State<HomePage>
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            const Text(
                               'Matches',
                               style: TextStyle(
-                                color: Colors.pink[800],
+                                color: Colors.black,
                                 fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
                               ),
                             ),
                             TextButton(
@@ -503,9 +332,9 @@ class _HomePageState extends State<HomePage>
                                   Get.to(() => const AllMatchPage(),
                                       transition: Transition.rightToLeft);
                                 },
-                                child: const Text('See All',
+                                child: Text('See All',
                                     style: TextStyle(
-                                        color: Colors.black, fontSize: 15)))
+                                        color: Colors.pink[800], fontSize: 15)))
                           ]),
                     ),
                     Expanded(
@@ -517,18 +346,22 @@ class _HomePageState extends State<HomePage>
                           (int index) {
                             return snapshot.data!.matches[index]['status'] ==
                                     'FINISHED'
-                                ? FinishedMatchItem(
-                                    match: snapshot.data!.matches[index])
-                                : UpcomingMatchesItem(
-                                    match: snapshot.data!.matches[index]);
+                                ? Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                    child: FinishedMatchItem(
+                                        match: snapshot.data!.matches[index]),
+                                  )
+                                : Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                    child: UpcomingMatchesItem(
+                                        match: snapshot.data!.matches[index]),
+                                  );
                           },
                         ).toList(),
-
-                            
-                          ),
+                      ),
                     )
-
-
                   ],
                 ),
               );
@@ -539,5 +372,4 @@ class _HomePageState extends State<HomePage>
           }
         });
   }
-
 }

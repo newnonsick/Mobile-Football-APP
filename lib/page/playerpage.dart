@@ -69,118 +69,122 @@ class _PlayerPageState extends State<PlayerPage> {
   Widget _buildTopScreen(Color backgroundColor) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: backgroundColor,
-          // boxShadow: [
-          //   BoxShadow(
-          //     color: Colors.grey.withOpacity(0.3),
-          //     spreadRadius: 2,
-          //     blurRadius: 10,
-          //     offset: const Offset(0, 3),
-          //   ),
-          // ],
-          image: const DecorationImage(
-            image: AssetImage(
-              'assets/images/background2.png',
+      child: Hero(
+        tag: widget.player['altIds']['opta'],
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: backgroundColor,
+            // boxShadow: [
+            //   BoxShadow(
+            //     color: Colors.grey.withOpacity(0.3),
+            //     spreadRadius: 2,
+            //     blurRadius: 10,
+            //     offset: const Offset(0, 3),
+            //   ),
+            // ],
+            image: const DecorationImage(
+              image: AssetImage(
+                'assets/images/background2.png',
+              ),
+              fit: BoxFit.cover,
+              opacity: 0.5,
             ),
-            fit: BoxFit.cover,
-            opacity: 0.5,
           ),
-        ),
-        height: 225,
-        child: SizedBox(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                    child: Row(
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.player['name']['display']
-                                  .toString()
-                                  .split(' ')[0],
-                              style: TextStyle(
-                                color: backgroundColor == Colors.white
-                                    ? Colors.black
-                                    : Colors.white,
-                                fontSize: 28,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            widget.player['name']['display']
-                                        .toString()
-                                        .split(' ')
-                                        .length >
-                                    1
-                                ? Text(
-                                    widget.player['name']['display']
-                                        .toString()
-                                        .split(' ')[1],
-                                    style: TextStyle(
-                                      color: backgroundColor == Colors.white
+          height: 225,
+          child: SizedBox(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                      child: Row(
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.player['name']['display']
+                                    .toString()
+                                    .split(' ')[0],
+                                style: TextStyle(
+                                  color:
+                                      backgroundColor.computeLuminance() > 0.5
                                           ? Colors.black
                                           : Colors.white,
-                                      fontSize: 28,
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              widget.player['name']['display']
+                                          .toString()
+                                          .split(' ')
+                                          .length >
+                                      1
+                                  ? Text(
+                                      widget.player['name']['display']
+                                          .toString()
+                                          .split(' ')[1],
+                                      style: TextStyle(
+                                        color: backgroundColor.computeLuminance() >
+                                                    0.5
+                                            ? Colors.black
+                                            : Colors.white,
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                              Row(
+                                children: [
+                                  Image.network(
+                                      "https://corsproxy.io/?https://resources.premierleague.com/premierleague/badges/50/${widget.player['currentTeam']['altIds']['opta']}@x2.png",
+                                      width: 25,
+                                      height: 25,
+                                      fit: BoxFit.contain),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    widget.player['currentTeam']['shortName'],
+                                    style: TextStyle(
+                                      color: backgroundColor.computeLuminance() >
+                                                  0.5
+                                          ? Colors.black
+                                          : Colors.white,
+                                      fontSize: 15,
                                       fontWeight: FontWeight.bold,
                                     ),
-                                  )
-                                : const SizedBox(),
-                            Row(
-                              children: [
-                                Image.network(
-                                    "https://corsproxy.io/?https://resources.premierleague.com/premierleague/badges/50/${widget.player['currentTeam']['altIds']['opta']}@x2.png",
-                                    width: 25,
-                                    height: 25,
-                                    fit: BoxFit.contain),
-                                const SizedBox(width: 5),
-                                Text(
-                                  widget.player['currentTeam']['shortName'],
-                                  style: TextStyle(
-                                    color: backgroundColor == Colors.white
-                                        ? Colors.black
-                                        : Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
                                   ),
-                                ),
-                              ],
-                            ),
-                            Text(
-                              widget.player['info']['shirtNum'].toString(),
-                              style: TextStyle(
-                                color: backgroundColor == Colors.white
-                                    ? Colors.black
-                                    : Colors.white,
-                                fontSize: 40,
-                                fontWeight: FontWeight.bold,
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                              Text(
+                                widget.player['info']['shirtNum'].toString(),
+                                style: TextStyle(
+                                  color: backgroundColor.computeLuminance() > 0.5
+                                      ? Colors.black
+                                      : Colors.white,
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Center(
-                    child: Image.network(
+                    Image.network(
                       'https://corsproxy.io/?https://resources.premierleague.com/premierleague/photos/players/250x250/${widget.player['altIds']['opta']}.png',
                       height: 190,
                       width: 190,
                       fit: BoxFit.contain,
                     ),
-                  ),
-                ],
-              )
-            ],
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

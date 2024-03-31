@@ -6,6 +6,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:project/page/matchinfopage.dart';
+import 'package:project/widget/pictureupcoming.dart';
+import 'package:project/widget/sharesheet.dart';
 
 class UpcomingMatchesItem extends StatefulWidget {
   final Map match;
@@ -36,7 +38,7 @@ class _UpcomingMatchesItemState extends State<UpcomingMatchesItem>
     _loadingController.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     DateTime utcDate = DateTime.parse(widget.match['utcDate']);
@@ -149,7 +151,14 @@ class _UpcomingMatchesItemState extends State<UpcomingMatchesItem>
                 borderRadius: BorderRadius.circular(20.0),
               ),
               SlidableAction(
-                onPressed: (context) {},
+                onPressed: (context) {
+                  showModalBottomSheet(
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      context: context,
+                      builder: (context) => ShareSheet(
+                          child: PictureUpcoming(match: widget.match)));
+                },
                 backgroundColor: Colors.blue,
                 icon: Icons.share,
                 borderRadius: BorderRadius.circular(20.0),
@@ -164,79 +173,83 @@ class _UpcomingMatchesItemState extends State<UpcomingMatchesItem>
                   transition: Transition.rightToLeft,
                 )
               },
-              child: Card(
-                shape: RoundedRectangleBorder(
+              child: Container(
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20.0),
+                  border: Border(
+                    top: BorderSide(
+                      color: Colors.pink[800]!,
+                      width: 5,
+                    ),
+                  ),
+                  color: Colors.white,
                 ),
-                color: Colors.white,
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 100.0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      SizedBox(
-                        width: 105,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                                width: 55, height: 55, child: crestHomeWidget),
-                            const SizedBox(height: 5.0),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  widget.match['homeTeam']['shortName'],
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Column(
+                width: double.infinity,
+                height: 105.0,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(
+                      width: 105,
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('VS',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold)),
-                          Text(
-                            formattedDate,
-                            style: const TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            formattedTime,
-                            style: const TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
+                          SizedBox(
+                              width: 55, height: 55, child: crestHomeWidget),
+                          const SizedBox(height: 5.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                widget.match['homeTeam']['shortName'],
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                      SizedBox(
-                        width: 105,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                                width: 55, height: 55, child: crestAwayWidget),
-                            const SizedBox(height: 5.0),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  widget.match['awayTeam']['shortName'],
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('VS',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold)),
+                        Text(
+                          formattedDate,
+                          style: const TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
                         ),
+                        Text(
+                          formattedTime,
+                          style: const TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 105,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                              width: 55, height: 55, child: crestAwayWidget),
+                          const SizedBox(height: 5.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                widget.match['awayTeam']['shortName'],
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -256,4 +269,7 @@ class _UpcomingMatchesItemState extends State<UpcomingMatchesItem>
     return querySnapshot.docs.isNotEmpty;
   }
 
+  Widget _buildPictureWidget() {
+    return Container();
+  }
 }

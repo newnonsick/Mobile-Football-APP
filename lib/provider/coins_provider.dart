@@ -7,11 +7,7 @@ class CoinModel extends ChangeNotifier {
 
   int get coins => _coins;
 
-  CoinModel() {
-    _fetchCoin();
-  }
-
-  Future<void> _fetchCoin() async {
+  Future<void> fetchCoin() async {
     try {
       var snapshot = await FirebaseFirestore.instance
           .collection('users')
@@ -41,4 +37,11 @@ class CoinModel extends ChangeNotifier {
       // Handle the case where there are not enough coins
     }
   }
+
+  void setCoins(int value) {
+    _coins = value;
+    notifyListeners();
+  }
+
+
 }
