@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:intl/intl.dart';
 
 class PictureLiveAndFinish extends StatelessWidget {
   final Map<dynamic, dynamic> match;
@@ -8,9 +7,6 @@ class PictureLiveAndFinish extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime utcDate = DateTime.parse(match['utcDate']);
-    String formattedDate = DateFormat('dd MMM yyyy').format(utcDate.toLocal());
-
     String crestHomeUrl = 'https://corsproxy.io/?${match['homeTeam']['crest']}';
     Widget crestHomeWidget;
     String crestAwayUrl = 'https://corsproxy.io/?${match['awayTeam']['crest']}';

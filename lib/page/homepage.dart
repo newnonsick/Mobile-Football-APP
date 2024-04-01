@@ -48,7 +48,11 @@ class _HomePageState extends State<HomePage>
     });
 
     socket.on('connect', (_) {
-      print('connected');
+      print('homepage connected');
+    });
+
+    socket.on('disconnect', (_) {
+      print('homepage disconnected');
     });
 
     socket.on('update_live_matches', (data) {
@@ -69,7 +73,6 @@ class _HomePageState extends State<HomePage>
   @override
   void dispose() {
     _loadingController.dispose();
-    socket.disconnect();
     super.dispose();
   }
 
@@ -192,8 +195,9 @@ class _HomePageState extends State<HomePage>
                       child: Text(
                         'Live Match',
                         style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20.0,),
+                          color: Colors.black,
+                          fontSize: 20.0,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 10.0),

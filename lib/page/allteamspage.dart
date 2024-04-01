@@ -5,6 +5,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:project/api/allteams_api.dart';
 import 'package:project/page/teaminfopage.dart';
+import 'package:project/provider/coins_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class AllTeamsPage extends StatefulWidget {
@@ -32,13 +34,23 @@ class _AllTeamsPageState extends State<AllTeamsPage>
     });
 
     socket.on('connect', (_) {
-      print('connected');
+      print('allteam connected');
+    });
+
+    socket.on('disconnect', (_) {
+      print('allteam disconnected');
     });
 
     socket.on('update_all_teams', (data) {
       setState(() {
         futureAllTeams = parseAllTeams(data);
       });
+    });
+
+    socket.on('update_coin', (data) {
+      if (data['uid'] == FirebaseAuth.instance.currentUser!.uid) {
+        Provider.of<CoinModel>(context, listen: false).addCoins(data['amount']);
+      }
     });
 
     socket.connect();
@@ -54,7 +66,6 @@ class _AllTeamsPageState extends State<AllTeamsPage>
   @override
   void dispose() {
     _loadingController.dispose();
-    socket.disconnect();
     super.dispose();
   }
 

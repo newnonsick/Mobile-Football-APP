@@ -41,7 +41,11 @@ class _StatisticsPageState extends State<StatisticsPage>
     });
 
     socket.on('connect', (_) {
-      print('connected');
+      print('statistic connected');
+    });
+
+    socket.on('disconnect', (_) {
+      print('statistic disconnected');
     });
 
     socket.on('update_top_scorers', (data) {
@@ -56,7 +60,6 @@ class _StatisticsPageState extends State<StatisticsPage>
   @override
   void dispose() {
     _loadingController.dispose();
-    socket.disconnect();
     super.dispose();
   }
 

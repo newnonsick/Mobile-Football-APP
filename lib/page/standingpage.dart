@@ -27,7 +27,11 @@ class _StandingPageState extends State<StandingPage> {
     });
 
     socket.on('connect', (_) {
-      print('connected');
+      print('standing connected');
+    });
+
+    socket.on('disconnect', (_) {
+      print('standing disconnected');
     });
 
     socket.on('update_table', (data) {
@@ -41,7 +45,6 @@ class _StandingPageState extends State<StandingPage> {
 
   @override
   void dispose() {
-    socket.disconnect();
     super.dispose();
   }
 

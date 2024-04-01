@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:project/page/homepage.dart';
@@ -36,11 +35,15 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       Provider.of<CoinModel>(context, listen: false).updateCoinsInFirestore();
     });
 
-    socket.on('receive_coin', (data) {
+    socket.on('update_coin', (data) {
       if (data['uid'] == FirebaseAuth.instance.currentUser!.uid) {
-        Provider.of<CoinModel>(context, listen: false).addCoins(data['value']);
+        Provider.of<CoinModel>(context, listen: false).addCoins(data['amount']);
       }
     });
+
+    socket.on('connect', (_) => print('myhome connect'));
+
+    socket.on('disconnect', (_) => print('myhome disconnect'));
 
     socket.connect();
   }
