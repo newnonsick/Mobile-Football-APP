@@ -100,7 +100,7 @@ class _FinishedMatchItemState extends State<FinishedMatchItem> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               SizedBox(
-                width: 105,
+                width: 108,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -156,7 +156,7 @@ class _FinishedMatchItemState extends State<FinishedMatchItem> {
                 ],
               ),
               SizedBox(
-                width: 105,
+                width: 108,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

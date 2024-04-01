@@ -10,12 +10,13 @@ import 'package:intl/intl.dart';
 import 'package:project/api/matchbyid_api.dart';
 import 'package:project/page/loginpage.dart';
 import 'package:project/page/matchinfopage.dart';
+import 'package:project/page/setusernamepage.dart';
 import 'package:project/provider/coins_provider.dart';
 import 'package:project/widget/makedismissible.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -29,6 +30,26 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Container(
         color: Colors.white,
         child: Column(children: [
+          FutureBuilder(
+            future: _buildMyProfileSction(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return snapshot.data!;
+              } else {
+                return Container(
+                    padding: const EdgeInsets.all(20),
+                    height: 300,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: Colors.grey[400]!,
+                      ),
+                      color: Colors.grey[100],
+                    ));
+              }
+            },
+          ),
+          const SizedBox(height: 20),
           _buildCoinsSection(),
           _buildMatchFollowingsSection(),
           _buildSignOutSection()
@@ -36,6 +57,185 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+
+  Future<Widget> _buildMyProfileSction() async {
+    var data = await FirebaseFirestore.instance
+        .collection('users')
+        .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) => value.docs[0].data());
+
+    return InkWell(
+      onTap: () {
+        Get.to(() => const SetUsernamePage(),
+            transition: Transition.rightToLeft);
+      },
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        height: 245,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: Colors.grey[400]!,
+          ),
+          color: Colors.grey[100],
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(FirebaseAuth.instance.currentUser!.displayName!,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1),
+                    Text(FirebaseAuth.instance.currentUser!.email!,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1),
+                    Text(
+                        "Joined on ${DateFormat('dd MMM yyyy').format(FirebaseAuth.instance.currentUser!.metadata.creationTime!)}",
+                        style: const TextStyle(
+                          fontSize: 15,
+                        )),
+                  ],
+                ),
+                //circle avatar icon
+                const Spacer(),
+                CircleAvatar(
+                  backgroundColor: Colors.pink[800],
+                  radius: 35,
+                  backgroundImage: NetworkImage(FirebaseAuth
+                          .instance.currentUser!.photoURL ??
+                      'https://cdn3.iconfinder.com/data/icons/football-and-soccer-4/64/goalkeeper-soccer-football-sport-avatar-512.png'),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  height: 100,
+                  width: 75,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.grey[400]!,
+                    ),
+                    color: Colors.grey[100],
+                  ),
+                  child: Column(children: [
+                    const SizedBox(height: 45, child: Text('Guesses')),
+                    Text("${data['guessedCorrect'] + data['guessedWrong']}",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.pink[800]))
+                  ]),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  height: 100,
+                  width: 75,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.grey[400]!,
+                    ),
+                    color: Colors.grey[100],
+                  ),
+                  child: Column(children: [
+                    const SizedBox(height: 45, child: Text('Guesses Correct')),
+                    Text('${data['guessedCorrect']}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.pink[800]))
+                  ]),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  height: 100,
+                  width: 75,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.grey[400]!,
+                    ),
+                    color: Colors.grey[100],
+                  ),
+                  child: Column(children: [
+                    const SizedBox(height: 45, child: Text('Guesses Wrong')),
+                    Text('${data['guessedWrong']}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.pink[800]))
+                  ]),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  height: 100,
+                  width: 75,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.grey[400]!,
+                    ),
+                    color: Colors.grey[100],
+                  ),
+                  child: Column(children: [
+                    const SizedBox(height: 45, child: Text('Guesses Streak')),
+                    Text('${data['correctStreak']}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.pink[800]))
+                  ]),
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // String _formatCoins(int coins) {
+  //   if (coins >= 100000000000000) {
+  //     return '${(coins / 1000000000000).toStringAsFixed(1)}T';
+  //   } else if (coins >= 10000000000000) {
+  //     return '${(coins / 1000000000000).toStringAsFixed(0)}T';
+  //   } else if (coins >= 1000000000000) {
+  //     return '${(coins / 1000000000000).toStringAsFixed(1)}T';
+  //   } else if (coins >= 10000000000) {
+  //     return '${(coins / 1000000000).toStringAsFixed(0)}B';
+  //   } else if (coins >= 1000000000) {
+  //     return '${(coins / 1000000000).toStringAsFixed(1)}B';
+  //   } else if (coins >= 10000000) {
+  //     return '${(coins / 1000000).toStringAsFixed(0)}M';
+  //   } else if (coins >= 1000000) {
+  //     return '${(coins / 1000000).toStringAsFixed(1)}M';
+  //   } else if (coins >= 10000) {
+  //     return '${(coins / 1000).toStringAsFixed(0)}K';
+  //   } else if (coins >= 1000) {
+  //     return '${(coins / 1000).toStringAsFixed(1)}K';
+  //   } else {
+  //     return coins.toString();
+  //   }
+  // }
 
   Widget _buildCoinsSection() {
     return Consumer<CoinModel>(
@@ -72,7 +272,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               child: RichText(
                 text: TextSpan(
-                  text: '${model.coins.toString()}.00',
+                  text: '${model.coins}',
                   style: TextStyle(
                     color: Colors.pink[800],
                     fontSize: 17,
@@ -265,15 +465,33 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             color: Colors.white,
           ),
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
           child: Column(
             children: [
+              Container(
+                height: 7,
+                width: 45,
+                decoration: BoxDecoration(
+                  color: Colors.pink[800],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              const SizedBox(height: 15),
               const Text('Match Followings',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   )),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
+              Container(
+                height: 1,
+                width: MediaQuery.of(context).size.width * 0.85,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              const SizedBox(height: 15),
               Expanded(
                 child: ListView(
                     controller: controllers,
@@ -304,16 +522,37 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     color: Colors.white,
                   ),
-                  padding: const EdgeInsets.all(20),
-                  child: ListView(
-                    controller: controllers,
-                    children: const [
-                      Text('Coins',
-                      textAlign: TextAlign.center,
+                  padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 7,
+                        width: 45,
+                        decoration: BoxDecoration(
+                          color: Colors.pink[800],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                      const Text('Coins',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           )),
+                      const SizedBox(height: 15),
+                      Container(
+                        height: 1,
+                        width: MediaQuery.of(context).size.width * 0.85,
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                      Expanded(
+                        child: ListView(
+                            controller: controllers, children: const []),
+                      ),
                     ],
                   ),
                 )));

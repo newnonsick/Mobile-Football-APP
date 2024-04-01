@@ -143,12 +143,15 @@ class _StandingPageState extends State<StandingPage> {
                       cells: [
                         DataCell(Row(
                           children: [
-                            Text(
-                                club['position'] < 10
-                                    ? '  ${club['position']}'
-                                    : '${club['position']}',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold)),
+                            SizedBox(
+                              width: 20,
+                              child: Text(
+                                  club['position'] < 10
+                                      ? '  ${club['position']}'
+                                      : '${club['position']}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold)),
+                            ),
                             const SizedBox(width: 10),
                             SizedBox(
                               width: 30,

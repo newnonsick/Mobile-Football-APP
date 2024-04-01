@@ -102,43 +102,46 @@ class _AllMatchPageState extends State<AllMatchPage>
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 20.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Matches',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20.0,
+        child: Container(
+          color: Colors.white,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Matches',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20.0,
+                    ),
                   ),
-                ),
-                Row(
-                  children: [
-                    Text(
-                      DateFormat('dd MMM yyyy').format(selectedDate),
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
+                  Row(
+                    children: [
+                      Text(
+                        DateFormat('dd MMM yyyy').format(selectedDate),
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                        ),
                       ),
-                    ),
-                    TextButton(
-                      onPressed: () => _showDatePicker(context),
-                      child: Text(
-                        'Select Date',
-                        style: TextStyle(color: Colors.pink[800], fontSize: 15),
+                      TextButton(
+                        onPressed: () => _showDatePicker(context),
+                        child: Text(
+                          'Select Date',
+                          style: TextStyle(color: Colors.pink[800], fontSize: 15),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 10.0),
-            _buildAllMatches(),
-          ],
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10.0),
+              _buildAllMatches(),
+            ],
+          ),
         ),
       ),
     );

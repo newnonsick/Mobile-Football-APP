@@ -58,6 +58,7 @@ class _MyAppState extends State<MyApp> {
     return ChangeNotifierProvider(
       create: (context) => CoinModel(),
       child: GetMaterialApp(
+        theme: ThemeData(fontFamily: 'Kanit'),
         home: _isUserLoggedIn() == false
             ? const LoginPage()
             : _isUserAlreadySetUsername() == false

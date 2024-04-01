@@ -59,6 +59,8 @@ dependencies:
   share_plus: ^7.2.2
   path_provider: ^2.1.2
   fluttertoast: ^8.2.4
+  camera: ^0.10.5+9
+  path: ^1.8.3
 
 flutter_native_splash:
   android: true
@@ -84,7 +86,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -109,6 +111,7 @@ flutter:
     - assets/images/logo_foreground.png
     - assets/images/logo960x960.png
     - assets/images/google_logo.png
+    - assets/images/out_image_background.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -136,3 +139,38 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: Lato
+      fonts:
+        - asset: assets/fonts/Lato/Lato-Black.ttf
+        - asset: assets/fonts/Lato/Lato-BlackItalic.ttf
+        - asset: assets/fonts/Lato/Lato-Bold.ttf
+        - asset: assets/fonts/Lato/Lato-BoldItalic.ttf
+        - asset: assets/fonts/Lato/Lato-Italic.ttf
+        - asset: assets/fonts/Lato/Lato-Light.ttf
+        - asset: assets/fonts/Lato/Lato-LightItalic.ttf
+        - asset: assets/fonts/Lato/Lato-Regular.ttf
+        - asset: assets/fonts/Lato/Lato-Thin.ttf
+        - asset: assets/fonts/Lato/Lato-ThinItalic.ttf
+    - family: Kanit
+      fonts:
+        - asset: assets/fonts/Kanit/Kanit-Black.ttf
+        - asset: assets/fonts/Kanit/Kanit-BlackItalic.ttf
+        - asset: assets/fonts/Kanit/Kanit-Bold.ttf
+        - asset: assets/fonts/Kanit/Kanit-BoldItalic.ttf
+        - asset: assets/fonts/Kanit/Kanit-ExtraBold.ttf
+        - asset: assets/fonts/Kanit/Kanit-ExtraBoldItalic.ttf
+        - asset: assets/fonts/Kanit/Kanit-ExtraLight.ttf
+        - asset: assets/fonts/Kanit/Kanit-ExtraLightItalic.ttf
+        - asset: assets/fonts/Kanit/Kanit-Italic.ttf
+        - asset: assets/fonts/Kanit/Kanit-Light.ttf
+        - asset: assets/fonts/Kanit/Kanit-LightItalic.ttf
+        - asset: assets/fonts/Kanit/Kanit-Medium.ttf
+        - asset: assets/fonts/Kanit/Kanit-MediumItalic.ttf
+        - asset: assets/fonts/Kanit/Kanit-Regular.ttf
+        - asset: assets/fonts/Kanit/Kanit-SemiBold.ttf
+        - asset: assets/fonts/Kanit/Kanit-SemiBoldItalic.ttf
+        - asset: assets/fonts/Kanit/Kanit-Thin.ttf
+        - asset: assets/fonts/Kanit/Kanit-ThinItalic.ttf
+
+

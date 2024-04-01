@@ -190,7 +190,7 @@ class _UpcomingMatchesItemState extends State<UpcomingMatchesItem>
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     SizedBox(
-                      width: 105,
+                      width: 108,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -229,7 +229,7 @@ class _UpcomingMatchesItemState extends State<UpcomingMatchesItem>
                       ],
                     ),
                     SizedBox(
-                      width: 105,
+                      width: 108,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

@@ -9,7 +9,8 @@ import 'package:share_plus/share_plus.dart';
 class WidgetToImage {
   static Future<Uint8List> takeScreenshot(Widget child) async {
     final screenshotController = ScreenshotController();
-    return await screenshotController.captureFromWidget(child, pixelRatio: 2.0);
+    return await screenshotController.captureFromWidget(Material(child: child),
+        pixelRatio: 4.0);
   }
 
   static Future<bool> saveImage(Uint8List byte) async {
@@ -17,10 +18,11 @@ class WidgetToImage {
     return result['isSuccess'];
   }
 
-  static Future<void> shareImage(Uint8List byte) async {
+  static Future<bool> shareImage(Uint8List byte) async {
     final directory = await getTemporaryDirectory();
     final imageFile = File('${directory.path}/image.png');
-    await imageFile.writeAsBytes(byte);
-    await Share.shareXFiles([XFile(imageFile.path)]);
+    await imageFile.writeAsBytes(byte, flush: true);
+    ShareResult result = await Share.shareXFiles([XFile(imageFile.path)]);
+    return result.status == ShareResultStatus.success;
   }
 }
