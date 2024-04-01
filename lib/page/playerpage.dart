@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 class PlayerPage extends StatefulWidget {
@@ -24,44 +25,53 @@ class _PlayerPageState extends State<PlayerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-        title: Text(
-          'LiveScore',
-          style: TextStyle(
-            color: Colors.pink[800],
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
+      body: Stack(
+        children: [
+          FutureBuilder<PaletteGenerator>(
+            future: PaletteGenerator.fromImageProvider(
+              NetworkImage(
+                  'https://resources.premierleague.com/premierleague/photos/players/110x140/${widget.player['altIds']['opta']}.png',
+                  scale: 0.5),
+            ),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                Color backgroundColor = snapshot.data!.dominantColor!.color;
+                return SafeArea(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        _buildTopScreen(backgroundColor),
+                        _buildPersonalInfo(),
+                        _buildPersonalStat(),
+                      ],
+                    ),
+                  ),
+                );
+              }
+            },
           ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-      ),
-      body: FutureBuilder<PaletteGenerator>(
-        future: PaletteGenerator.fromImageProvider(
-          NetworkImage(
-              'https://resources.premierleague.com/premierleague/photos/players/110x140/${widget.player['altIds']['opta']}.png',
-              scale: 0.5),
-        ),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            Color backgroundColor = snapshot.data!.dominantColor!.color;
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  _buildTopScreen(backgroundColor),
-                  _buildPersonalInfo(),
-                  _buildPersonalStat(),
-                ],
+          SafeArea(
+            child: Opacity(
+              opacity: 0.7,
+              child: Container(
+                margin: const EdgeInsets.only(left: 15),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: IconButton(
+                    icon: const Icon(Icons.arrow_back_ios_rounded),
+                    onPressed: () {
+                      Get.back();
+                    }),
               ),
-            );
-          }
-        },
+            ),
+          ),
+        ],
       ),
     );
   }

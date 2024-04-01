@@ -38,9 +38,29 @@ class CoinModel extends ChangeNotifier {
     }
   }
 
+  void addCoins(int value) {
+    _coins += value;
+    notifyListeners();
+  }
+
   void setCoins(int value) {
     _coins = value;
     notifyListeners();
+  }
+
+  Future<void> updateCoinsInFirestore() async {
+    try {
+      final dbUser = await FirebaseFirestore.instance
+          .collection('users')
+          .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      if (dbUser.docs.isNotEmpty) {
+        await dbUser.docs[0].reference.update({'coins': _coins});
+      }
+    } catch (error) {
+      print('Error updating coin count in Firestore: $error');
+    }
   }
 
 

@@ -144,7 +144,8 @@ class ShareSheet extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(50),
                                     ),
                                     child: Consumer<CoinModel>(
-                                      builder: (context, model, child2) => IconButton(
+                                      builder: (context, model, child2) =>
+                                          IconButton(
                                         onPressed: () async {
                                           if (model.coins < 2) {
                                             ShowToast.show(
@@ -154,10 +155,10 @@ class ShareSheet extends StatelessWidget {
                                                 ToastGravity.BOTTOM);
                                             return;
                                           }
-                                          final camera = await availableCameras();
-                                          final image =
-                                              await WidgetToImage.takeScreenshot(
-                                                  child);
+                                          final camera =
+                                              await availableCameras();
+                                          final image = await WidgetToImage
+                                              .takeScreenshot(child);
                                           Get.to(() => CamearaPage(
                                               cameras: camera, image: image));
                                         },
@@ -200,8 +201,11 @@ class ShareSheet extends StatelessWidget {
                                               await WidgetToImage.shareImage(
                                                   image);
                                           if (result) {
+                                            await Future.delayed(
+                                                const Duration(seconds: 2));
                                             model.decrement(2);
-                                            Get.back();
+                                            await model
+                                                .updateCoinsInFirestore();
                                           }
                                         },
                                         icon: const Icon(

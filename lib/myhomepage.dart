@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -33,11 +33,16 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     });
 
     socket.on('sync_coin', (data) {
-      _updateCoinsInFirestore();
+      Provider.of<CoinModel>(context, listen: false).updateCoinsInFirestore();
+    });
+
+    socket.on('receive_coin', (data) {
+      if (data['uid'] == FirebaseAuth.instance.currentUser!.uid) {
+        Provider.of<CoinModel>(context, listen: false).addCoins(data['value']);
+      }
     });
 
     socket.connect();
-
   }
 
   @override
@@ -52,7 +57,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached) {
-      await _updateCoinsInFirestore();
+      await Provider.of<CoinModel>(context, listen: false)
+          .updateCoinsInFirestore();
       _timer.cancel();
     } else if (state == AppLifecycleState.resumed) {
       await startCoinsTimer();
@@ -66,23 +72,23 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     });
   }
 
-  Future<void> _updateCoinsInFirestore() async {
-    try {
-      final coinsModel = Provider.of<CoinModel>(context, listen: false);
-      final coins = coinsModel.coins;
+  // Future<void> _updateCoinsInFirestore() async {
+  //   try {
+  //     final coinsModel = Provider.of<CoinModel>(context, listen: false);
+  //     final coins = coinsModel.coins;
 
-      final dbUser = await FirebaseFirestore.instance
-          .collection('users')
-          .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-          .get();
+  //     final dbUser = await FirebaseFirestore.instance
+  //         .collection('users')
+  //         .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+  //         .get();
 
-      if (dbUser.docs.isNotEmpty) {
-        await dbUser.docs[0].reference.update({'coins': coins});
-      }
-    } catch (error) {
-      print('Error updating coin count in Firestore: $error');
-    }
-  }
+  //     if (dbUser.docs.isNotEmpty) {
+  //       await dbUser.docs[0].reference.update({'coins': coins});
+  //     }
+  //   } catch (error) {
+  //     print('Error updating coin count in Firestore: $error');
+  //   }
+  // }
 
   void _addCoins() {
     Provider.of<CoinModel>(context, listen: false).increment();
