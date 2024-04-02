@@ -96,16 +96,22 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        team['shortName'],
-                        style: TextStyle(
-                            color: invertedColor,
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 2.1,
+                        child: Text(
+                          team['shortName'],
+                          style: TextStyle(
+                              color: invertedColor,
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
-                      Text(
-                        team['venue'],
-                        style: TextStyle(color: invertedColor, fontSize: 20),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 2.1,
+                        child: Text(
+                          team['venue'],
+                          style: TextStyle(color: invertedColor, fontSize: 20),
+                        ),
                       ),
                       Text(
                         'Est: ${team['founded']}',
@@ -162,12 +168,15 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
                                       TextStyle(color: textColor, fontSize: 20),
                                 ),
                                 const SizedBox(width: 5),
-                                Text(
-                                  team['venue'],
-                                  style: TextStyle(
-                                      color: textColor,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width / 1.8,
+                                  child: Text(
+                                    team['venue'],
+                                    style: TextStyle(
+                                        color: textColor,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                               ],
                             ),
@@ -205,12 +214,15 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
                                       TextStyle(color: textColor, fontSize: 20),
                                 ),
                                 const SizedBox(width: 5),
-                                Text(
-                                  team['clubColors'].toString(),
-                                  style: TextStyle(
-                                      color: textColor,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width / 1.9,
+                                  child: Text(
+                                    team['clubColors'].toString(),
+                                    style: TextStyle(
+                                        color: textColor,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                               ],
                             ),
@@ -228,14 +240,17 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
                                     builder: (context, followLink) {
                                       return InkWell(
                                         onTap: followLink,
-                                        child: Text(
-                                          team['website'],
-                                          style: TextStyle(
-                                              color: Colors.blue[800],
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.bold,
-                                              decoration:
-                                                  TextDecoration.underline),
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context).size.width / 1.8,
+                                          child: Text(
+                                            team['website'],
+                                            style: TextStyle(
+                                                color: Colors.blue[800],
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.bold,
+                                                decoration:
+                                                    TextDecoration.underline),
+                                          ),
                                         ),
                                       );
                                     }),
@@ -294,15 +309,15 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
               ),
               const SizedBox(height: 20),
               Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: invertedColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(20)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: invertedColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
                         'Running Competitions',
                         style: TextStyle(
                             color: Colors.pink[800],
@@ -314,7 +329,8 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
                         Row(
                           children: [
                             Text('- ',
-                                style: TextStyle(color: textColor, fontSize: 20)),
+                                style:
+                                    TextStyle(color: textColor, fontSize: 20)),
                             const SizedBox(width: 5),
                             Text(competition['name'],
                                 style: TextStyle(
@@ -323,7 +339,9 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
                                     fontWeight: FontWeight.bold)),
                             const SizedBox(width: 10),
                             Container(
-                              color: textColor == Colors.white ? Colors.white : Colors.transparent,
+                              color: textColor == Colors.white
+                                  ? Colors.white
+                                  : Colors.transparent,
                               child: Image.network(
                                 'https://corsproxy.io/?${competition['emblem']}',
                                 width: 30,
@@ -333,8 +351,8 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
                             ),
                           ],
                         ),
-                  ],)
-                )
+                    ],
+                  ))
             ]),
           ),
         ),
