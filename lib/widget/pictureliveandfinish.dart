@@ -96,13 +96,34 @@ class PictureLiveAndFinish extends StatelessWidget {
                     Column(
                       children: [
                         const SizedBox(height: 30),
-                        Text(
-                            '▶▶ ${match['status'] == 'FINISHED' ? 'FT' : 'LIVE'} ◀◀',
-                            style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey,
-                                fontFamily: 'Kanit')),
+                        RichText(
+                            text: TextSpan(children: [
+                          const TextSpan(
+                              text: '▶▶ ',
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey,
+                                  fontFamily: 'Kanit')),
+                          TextSpan(
+                              text: match['status'] == 'FINISHED'
+                                  ? 'FT'
+                                  : 'LIVE',
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: match['status'] == 'FINISHED'
+                                      ? Colors.grey
+                                      : Colors.pink[800],
+                                  fontFamily: 'Kanit')),
+                          const TextSpan(
+                              text: ' ◀◀',
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey,
+                                  fontFamily: 'Kanit')),
+                        ])),
                         RichText(
                             text: TextSpan(children: <TextSpan>[
                           TextSpan(

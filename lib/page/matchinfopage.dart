@@ -212,7 +212,7 @@ class _MatchInfoPageState extends State<MatchInfoPage> {
                                       color:
                                           widget.match['status'] == 'FINISHED'
                                               ? Colors.grey
-                                              : Colors.green,
+                                              : Colors.pink[800],
                                       fontFamily: 'Kanit')),
                               const TextSpan(
                                   text: ' ◀◀',
