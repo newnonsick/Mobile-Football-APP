@@ -102,7 +102,7 @@ class _MyAppState extends State<MyApp> {
       'LIVE_SCORE_CHANNEL_NAME',
       importance: Importance.max,
       priority: Priority.high,
-      showWhen: false,
+      showWhen: true,
     );
 
     DarwinNotificationDetails iOSPlatformChannelSpecifics =
@@ -114,8 +114,8 @@ class _MyAppState extends State<MyApp> {
 
     await flutterLocalNotificationsPlugin.show(
       0,
-      message.notification!.title,
-      message.notification!.body,
+      message.notification?.title ?? '',
+      message.notification?.body ?? '',
       platformChannelSpecifics,
     );
   }

@@ -24,6 +24,18 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .snapshots()
+        .listen((event) {
+      setState(() {});
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -212,30 +224,6 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-
-  // String _formatCoins(int coins) {
-  //   if (coins >= 100000000000000) {
-  //     return '${(coins / 1000000000000).toStringAsFixed(1)}T';
-  //   } else if (coins >= 10000000000000) {
-  //     return '${(coins / 1000000000000).toStringAsFixed(0)}T';
-  //   } else if (coins >= 1000000000000) {
-  //     return '${(coins / 1000000000000).toStringAsFixed(1)}T';
-  //   } else if (coins >= 10000000000) {
-  //     return '${(coins / 1000000000).toStringAsFixed(0)}B';
-  //   } else if (coins >= 1000000000) {
-  //     return '${(coins / 1000000000).toStringAsFixed(1)}B';
-  //   } else if (coins >= 10000000) {
-  //     return '${(coins / 1000000).toStringAsFixed(0)}M';
-  //   } else if (coins >= 1000000) {
-  //     return '${(coins / 1000000).toStringAsFixed(1)}M';
-  //   } else if (coins >= 10000) {
-  //     return '${(coins / 1000).toStringAsFixed(0)}K';
-  //   } else if (coins >= 1000) {
-  //     return '${(coins / 1000).toStringAsFixed(1)}K';
-  //   } else {
-  //     return coins.toString();
-  //   }
-  // }
 
   Widget _buildCoinsSection() {
     return Consumer<CoinModel>(

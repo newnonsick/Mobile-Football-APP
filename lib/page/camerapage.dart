@@ -1,156 +1,443 @@
-import 'dart:async';
 import 'dart:typed_data';
-import 'dart:ui' as ui;
-import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:project/provider/coins_provider.dart';
+import 'package:project/utils/showtoast.dart';
+import 'package:project/utils/widgettoimage.dart';
+import 'package:provider/provider.dart';
 
 class CamearaPage extends StatefulWidget {
   final List<CameraDescription> cameras;
   final Uint8List image;
 
-  const CamearaPage({Key? key, required this.cameras, required this.image})
-      : super(key: key);
+  const CamearaPage({super.key, required this.cameras, required this.image});
 
   @override
   State<CamearaPage> createState() => _CamearaPageState();
 }
 
 class _CamearaPageState extends State<CamearaPage> {
-  late CameraController _controller;
+  late CameraController controller;
   late Future<void> _initializeControllerFuture;
+  Offset _imagePosition = const Offset(0, 0);
+
+  Future<void> initialCamera() async {
+    controller = CameraController(widget.cameras[0], ResolutionPreset.veryHigh);
+    _initializeControllerFuture = controller.initialize();
+  }
 
   @override
   void initState() {
     super.initState();
-    _controller = CameraController(
-      // Get a specific camera from the list of available cameras.
-      widget.cameras.first,
-      // Define the resolution to use.
-      ResolutionPreset.medium,
-    );
-
-    // Next, initialize the controller. This returns a Future.
-    _initializeControllerFuture = _controller.initialize();
+    initialCamera();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        _imagePosition = Offset(
+            (MediaQuery.of(context).size.width -
+                    MediaQuery.of(context).size.width * 0.4) /
+                2,
+            0);
+      });
+    });
   }
 
   @override
   void dispose() {
-    // Dispose of the controller when the widget is disposed.
-    _controller.dispose();
+    controller.dispose();
     super.dispose();
   }
 
-  Future<void> takePicture() async {
-    if (!_controller.value.isInitialized) {
+  void _takePicture() async {
+    int coins = Provider.of<CoinModel>(context, listen: false).coins;
+    if (coins < 2) {
+      ShowToast.show(
+          'Not enough coins', Colors.red, Colors.white, ToastGravity.BOTTOM);
       return;
     }
 
-    // Ensure that the camera is initialized.
-    await _initializeControllerFuture;
+    final image = await WidgetToImage.takeScreenshot(Stack(
+      children: [
+        SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height * 0.75,
+          child: CameraPreview(controller),
+        ),
+        Positioned(
+          left: _imagePosition.dx,
+          top: _imagePosition.dy,
+          child: GestureDetector(
+            onPanUpdate: (details) {
+              setState(() {
+                _imagePosition += details.delta;
+                if (_imagePosition.dx < 0) {
+                  _imagePosition = Offset(0, _imagePosition.dy);
+                } else if (_imagePosition.dy < 0) {
+                  _imagePosition = Offset(_imagePosition.dx, 0);
+                } else if (_imagePosition.dx >
+                    MediaQuery.of(context).size.width * 0.6) {
+                  _imagePosition = Offset(
+                    MediaQuery.of(context).size.width * 0.6,
+                    _imagePosition.dy,
+                  );
+                } else if (_imagePosition.dy >
+                    MediaQuery.of(context).size.height * 0.6) {
+                  _imagePosition = Offset(
+                    _imagePosition.dx,
+                    MediaQuery.of(context).size.height * 0.6,
+                  );
+                }
+              });
+            },
+            child: Image.memory(
+              widget.image,
+              fit: BoxFit.contain,
+              width: MediaQuery.of(context).size.width * 0.4,
+              height: MediaQuery.of(context).size.height * 0.2,
+              alignment: Alignment.center,
+            ),
+          ),
+        ),
+      ],
+    ));
 
-    // Construct the path where the image should be saved using the path_provider package.
-    final Directory extDir = await getApplicationDocumentsDirectory();
-    final String dirPath = '${extDir.path}/images';
-    await Directory(dirPath).create(recursive: true);
-    final String filePath = '$dirPath/${DateTime.now()}.png';
-
-    // Attempt to take a picture and log where it's been saved.
-    XFile pictureFile = await _controller.takePicture();
-
-    // Load the captured image as a File.
-    File file = File(pictureFile.path);
-
-    // Combine the captured image and the image passed from the constructor.
-    ui.Image capturedImage = await loadImage(file);
-    ui.Image overlayImage = await loadImage(widget.image);
-
-    final recorder = ui.PictureRecorder();
-    final canvas = Canvas(recorder);
-
-    final cameraSize =
-        Size(capturedImage.width.toDouble(), capturedImage.height.toDouble());
-    final overlaySize =
-        Size(overlayImage.width.toDouble(), overlayImage.height.toDouble());
-
-    canvas.drawImage(capturedImage, Offset.zero, Paint());
-
-    final scale = cameraSize.shortestSide / overlaySize.shortestSide;
-    final fittedSize = overlaySize * scale;
-    final fittedOffset = Offset((cameraSize.width - fittedSize.width) / 2,
-        (cameraSize.height - fittedSize.height) / 2);
-    canvas.drawImageRect(
-        overlayImage,
-        Rect.fromLTRB(0, 0, overlaySize.width, overlaySize.height),
-        Rect.fromLTWH(fittedOffset.dx, fittedOffset.dy, fittedSize.width,
-            fittedSize.height),
-        Paint());
-
-    final combinedImage = await recorder
-        .endRecording()
-        .toImage(cameraSize.width.toInt(), cameraSize.height.toInt());
-    final byteData =
-        await combinedImage.toByteData(format: ui.ImageByteFormat.png);
-
-    // Save the combined image to the filesystem.
-    final combinedFilePath = '$dirPath/${DateTime.now()}_combined.png';
-    final combinedFile = File(combinedFilePath);
-    await combinedFile.writeAsBytes(byteData!.buffer.asUint8List());
-
-    // Display the path of the saved image to the console.
-    print('Saved combined image to $combinedFilePath');
+    bool result = await WidgetToImage.saveImage(image);
+    if (result) {
+      Provider.of<CoinModel>(context, listen: false).decrement(2);
+      ShowToast.show('Image saved to gallery', Colors.green, Colors.white,
+          ToastGravity.BOTTOM);
+    } else {
+      ShowToast.show('Failed to save image', Colors.red, Colors.white,
+          ToastGravity.BOTTOM);
+    }
   }
 
-  Future<ui.Image> loadImage(dynamic source) async {
-    final Completer<ui.Image> completer = Completer();
-    ui.Image? img;
-    if (source is File) {
-      final Uint8List bytes = await source.readAsBytes();
-      img = await decodeImageFromList(bytes);
-    } else if (source is Uint8List) {
-      img = await decodeImageFromList(source);
-    }
-    if (img != null) {
-      completer.complete(img);
-    }
-    return completer.future;
+  void _swapCamera() {
+    final CameraLensDirection newDirection =
+        controller.description.lensDirection == CameraLensDirection.back
+            ? CameraLensDirection.front
+            : CameraLensDirection.back;
+    _initializeControllerFuture = controller.dispose().then((_) {
+      controller = CameraController(
+          widget.cameras
+              .firstWhere((camera) => camera.lensDirection == newDirection),
+          ResolutionPreset.veryHigh);
+      return controller.initialize();
+    });
+    setState(() {});
   }
-
+  // IconButton(
+  //           icon: const Icon(Icons.flip_camera_ios),
+  //           onPressed: _swapCamera,
+  //         ),
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.black,
+    ));
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Camera'),
-      ),
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: FutureBuilder<void>(
-              future: _initializeControllerFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  // If the Future is complete, display the preview.
-                  return CameraPreview(_controller);
-                } else {
-                  // Otherwise, display a loading indicator.
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
-          ),
-          Positioned(
-            bottom: 16,
-            left: 16,
-            child: ElevatedButton(
-              onPressed: takePicture,
-              child: const Icon(Icons.camera),
-            ),
-          ),
-        ],
+      body: FutureBuilder<void>(
+        future: _initializeControllerFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Column(
+              children: [
+                SafeArea(
+                  child: Stack(
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height * 0.75,
+                        child: CameraPreview(controller),
+                      ),
+                      Positioned(
+                        left: _imagePosition.dx,
+                        top: _imagePosition.dy,
+                        child: GestureDetector(
+                          onPanUpdate: (details) {
+                            setState(() {
+                              _imagePosition += details.delta;
+                              if (_imagePosition.dx < 0) {
+                                _imagePosition = Offset(0, _imagePosition.dy);
+                              } else if (_imagePosition.dy < 0) {
+                                _imagePosition = Offset(_imagePosition.dx, 0);
+                              } else if (_imagePosition.dx >
+                                  MediaQuery.of(context).size.width * 0.6) {
+                                _imagePosition = Offset(
+                                  MediaQuery.of(context).size.width * 0.6,
+                                  _imagePosition.dy,
+                                );
+                              } else if (_imagePosition.dy >
+                                  MediaQuery.of(context).size.height * 0.6) {
+                                _imagePosition = Offset(
+                                  _imagePosition.dx,
+                                  MediaQuery.of(context).size.height * 0.6,
+                                );
+                              }
+                            });
+                          },
+                          child: Image.memory(
+                            widget.image,
+                            fit: BoxFit.contain,
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            height: MediaQuery.of(context).size.height * 0.2,
+                            alignment: Alignment.center,
+                          ),
+                        ),
+                      ),
+                      SafeArea(
+                        child: Opacity(
+                          opacity: 0.7,
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 15),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: IconButton(
+                                icon: const Icon(Icons.arrow_back_ios_rounded),
+                                onPressed: () {
+                                  Get.back();
+                                }),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  color: Colors.black,
+                  height: MediaQuery.of(context).size.height * 0.19,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Consumer<CoinModel>(
+                              builder: (context, model, child) => Center(
+                                child: Text(
+                                      _formatCoins(model.coins),
+                                      style: TextStyle(
+                                        color: Colors.pink[800],
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                              ))),
+                      Container(
+                        height: 70,
+                        width: 70,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(50),
+                          border:
+                              Border.all(color: Colors.grey[800]!, width: 7),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              icon: const Icon(
+                                Icons.circle,
+                                color: Colors.white,
+                                size: 38,
+                              ),
+                              onPressed: _takePicture,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[800]!,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.flip_camera_ios,
+                            color: Colors.white,
+                          ),
+                          onPressed: _swapCamera,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return SafeArea(
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height * 0.75,
+                        color: Colors.black,
+                      ),
+                      Positioned(
+                        left: _imagePosition.dx,
+                        top: _imagePosition.dy,
+                        child: GestureDetector(
+                          onPanUpdate: (details) {
+                            setState(() {
+                              _imagePosition += details.delta;
+                              if (_imagePosition.dx < 0) {
+                                _imagePosition = Offset(0, _imagePosition.dy);
+                              } else if (_imagePosition.dy < 0) {
+                                _imagePosition = Offset(_imagePosition.dx, 0);
+                              } else if (_imagePosition.dx >
+                                  MediaQuery.of(context).size.width * 0.6) {
+                                _imagePosition = Offset(
+                                  MediaQuery.of(context).size.width * 0.6,
+                                  _imagePosition.dy,
+                                );
+                              } else if (_imagePosition.dy >
+                                  MediaQuery.of(context).size.height * 0.8) {
+                                _imagePosition = Offset(
+                                  _imagePosition.dx,
+                                  MediaQuery.of(context).size.height * 0.8,
+                                );
+                              }
+                            });
+                          },
+                          child: Image.memory(
+                            widget.image,
+                            fit: BoxFit.contain,
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            height: MediaQuery.of(context).size.height * 0.2,
+                            alignment: Alignment.center,
+                          ),
+                        ),
+                      ),
+                      SafeArea(
+                        child: Opacity(
+                          opacity: 0.7,
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 15),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: IconButton(
+                                icon: const Icon(Icons.arrow_back_ios_rounded),
+                                onPressed: () {
+                                  Get.back();
+                                }),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    color: Colors.black,
+                    height: MediaQuery.of(context).size.height * 0.19,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Consumer<CoinModel>(
+                                builder: (context, model, child) => Center(
+                                  child: Text(
+                                        _formatCoins(model.coins),
+                                        style: TextStyle(
+                                          color: Colors.pink[800],
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                ))),
+                        Container(
+                          height: 70,
+                          width: 70,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(50),
+                            border:
+                                Border.all(color: Colors.grey[800]!, width: 7),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.circle,
+                                  color: Colors.white,
+                                  size: 38,
+                                ),
+                                onPressed: _takePicture,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[800]!,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.flip_camera_ios,
+                              color: Colors.white,
+                            ),
+                            onPressed: _swapCamera,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+        },
       ),
     );
+  }
+
+  String _formatCoins(int coins) {
+    if (coins >= 100000000000000) {
+      return '${(coins / 1000000000000).toStringAsFixed(1)}T';
+    } else if (coins >= 10000000000000) {
+      return '${(coins / 1000000000000).toStringAsFixed(0)}T';
+    } else if (coins >= 1000000000000) {
+      return '${(coins / 1000000000000).toStringAsFixed(1)}T';
+    } else if (coins >= 10000000000) {
+      return '${(coins / 1000000000).toStringAsFixed(0)}B';
+    } else if (coins >= 1000000000) {
+      return '${(coins / 1000000000).toStringAsFixed(1)}B';
+    } else if (coins >= 10000000) {
+      return '${(coins / 1000000).toStringAsFixed(0)}M';
+    } else if (coins >= 1000000) {
+      return '${(coins / 1000000).toStringAsFixed(1)}M';
+    } else if (coins >= 10000) {
+      return '${(coins / 1000).toStringAsFixed(0)}K';
+    } else if (coins >= 1000) {
+      return '${(coins / 1000).toStringAsFixed(1)}K';
+    } else {
+      return '$coins';
+    }
   }
 }
