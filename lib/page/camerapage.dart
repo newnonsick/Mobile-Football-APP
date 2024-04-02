@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -69,36 +68,12 @@ class _CamearaPageState extends State<CamearaPage> {
         Positioned(
           left: _imagePosition.dx,
           top: _imagePosition.dy,
-          child: GestureDetector(
-            onPanUpdate: (details) {
-              setState(() {
-                _imagePosition += details.delta;
-                if (_imagePosition.dx < 0) {
-                  _imagePosition = Offset(0, _imagePosition.dy);
-                } else if (_imagePosition.dy < 0) {
-                  _imagePosition = Offset(_imagePosition.dx, 0);
-                } else if (_imagePosition.dx >
-                    MediaQuery.of(context).size.width * 0.6) {
-                  _imagePosition = Offset(
-                    MediaQuery.of(context).size.width * 0.6,
-                    _imagePosition.dy,
-                  );
-                } else if (_imagePosition.dy >
-                    MediaQuery.of(context).size.height * 0.6) {
-                  _imagePosition = Offset(
-                    _imagePosition.dx,
-                    MediaQuery.of(context).size.height * 0.6,
-                  );
-                }
-              });
-            },
-            child: Image.memory(
-              widget.image,
-              fit: BoxFit.contain,
-              width: MediaQuery.of(context).size.width * 0.4,
-              height: MediaQuery.of(context).size.height * 0.2,
-              alignment: Alignment.center,
-            ),
+          child: Image.memory(
+            widget.image,
+            fit: BoxFit.contain,
+            width: MediaQuery.of(context).size.width * 0.4,
+            height: MediaQuery.of(context).size.height * 0.2,
+            alignment: Alignment.center,
           ),
         ),
       ],
