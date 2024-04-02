@@ -125,9 +125,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 CircleAvatar(
                   backgroundColor: Colors.pink[800],
                   radius: 35,
-                  backgroundImage: NetworkImage(FirebaseAuth
-                          .instance.currentUser!.photoURL ??
-                      'https://cdn3.iconfinder.com/data/icons/football-and-soccer-4/64/goalkeeper-soccer-football-sport-avatar-512.png'),
+                  backgroundImage: FirebaseAuth
+                              .instance.currentUser!.photoURL ==
+                          null
+                      ? const AssetImage('assets/images/default_profile.png')
+                      : NetworkImage(
+                              FirebaseAuth.instance.currentUser!.photoURL!)
+                          as ImageProvider,
                 ),
               ],
             ),
@@ -538,8 +542,77 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       const SizedBox(height: 15),
                       Expanded(
-                        child: ListView(
-                            controller: controllers, children: const []),
+                        child: ListView(controller: controllers, children: [
+                          Text('How to earn coins?',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.pink[800],
+                              )),
+                          const SizedBox(height: 10),
+                          const Text(
+                              '1. Stay active on the app. 1min active = 1 coin',
+                              style: TextStyle(
+                                fontSize: 15,
+                              )),
+                          const SizedBox(height: 10),
+                          const Text(
+                              '2. Correctly guess the outcome of a match. You will earn 2x the coins you bet',
+                              style: TextStyle(
+                                fontSize: 15,
+                              )),
+                          const SizedBox(height: 20),
+                          Text('How to spend coins?',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.pink[800],
+                              )),
+                          const SizedBox(height: 10),
+                          const Text(
+                              '1. You can use coins to bet on the outcome of a match. If you guess correctly, you will earn 2x the coins you bet',
+                              style: TextStyle(
+                                fontSize: 15,
+                              )),
+                          const SizedBox(height: 10),
+                          const Text(
+                              '2. You can use coins to share or save photos of the match. 2 coins per share or save photo',
+                              style: TextStyle(
+                                fontSize: 15,
+                              )),
+                          const SizedBox(height: 20),
+                          Text('How to check your coins?',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.pink[800],
+                              )),
+                          const SizedBox(height: 10),
+                          const Text(
+                              '1. You can check your coins on the profile page',
+                              style: TextStyle(
+                                fontSize: 15,
+                              )),
+                          const SizedBox(height: 10),
+                          const Text(
+                              '2. You can check your coins on the match page',
+                              style: TextStyle(
+                                fontSize: 15,
+                              )),
+                          const SizedBox(height: 20),
+                          Text('How to earn more coins?',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.pink[800],
+                              )),
+                          const SizedBox(height: 10),
+                          const Text(
+                              '1. Nothing. You can only earn coins by staying active on the app and correctly guessing the outcome of a match',
+                              style: TextStyle(
+                                fontSize: 15,
+                              )),
+                        ]),
                       ),
                     ],
                   ),

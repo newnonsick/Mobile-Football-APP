@@ -119,6 +119,7 @@ flutter:
     - assets/images/home_broken_crown.png
     - assets/images/away_broken_crown.png
     - assets/images/vs.png
+    - assets/images/default_profile.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
