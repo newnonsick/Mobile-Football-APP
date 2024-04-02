@@ -92,7 +92,7 @@ class _LiveMatchItemState extends State<LiveMatchItem> {
                         const Text('Premier League',
                             style: TextStyle(
                                 color: Colors.grey, fontFamily: 'Kanit')),
-                        const SizedBox(width: 60.0),
+                        const SizedBox(width: 52.0),
                         const Text('LIVE',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
