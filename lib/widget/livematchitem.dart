@@ -115,16 +115,19 @@ class _LiveMatchItemState extends State<LiveMatchItem> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-                  SizedBox(height: 90.0, width: 90.0, child: crestHomeWidget),
-                  const SizedBox(height: 10.0),
-                  Text(widget.match['homeTeam']['shortName'],
-                      style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.bold))
-                ]),
+                SizedBox(
+                  width: 115.0,
+                  child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    SizedBox(height: 90.0, width: 90.0, child: crestHomeWidget),
+                    const SizedBox(height: 10.0),
+                    Text(widget.match['homeTeam']['shortName'],
+                        style: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold))
+                  ]),
+                ),
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                   RichText(
                       text: TextSpan(children: <TextSpan>[
@@ -153,16 +156,19 @@ class _LiveMatchItemState extends State<LiveMatchItem> {
                             fontFamily: 'Kanit')),
                   ])),
                 ]),
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-                  SizedBox(height: 90.0, width: 90.0, child: crestAwayWidget),
-                  const SizedBox(height: 10.0),
-                  Text(widget.match['awayTeam']['shortName'],
-                      style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.bold)),
-                ]),
+                SizedBox(
+                  width: 115.0,
+                  child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    SizedBox(height: 90.0, width: 90.0, child: crestAwayWidget),
+                    const SizedBox(height: 10.0),
+                    Text(widget.match['awayTeam']['shortName'],
+                        style: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold)),
+                  ]),
+                ),
               ],
             ),
             const SizedBox(height: 15.0),
