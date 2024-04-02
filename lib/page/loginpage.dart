@@ -12,7 +12,7 @@ import 'package:project/page/setusernamepage.dart';
 import 'package:project/utils/showtoast.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -160,7 +160,36 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                   ],
                                 )),
-                            const SizedBox(height: 60),
+                            const SizedBox(height: 10),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: InkWell(
+                                onTap: () async {
+                                  if (emailController.text.isEmpty) {
+                                    ShowToast.show(
+                                        'Please enter your email',
+                                        Colors.red,
+                                        Colors.white,
+                                        ToastGravity.BOTTOM);
+                                    return;
+                                  }
+                                  await FirebaseAuth.instance
+                                      .sendPasswordResetEmail(
+                                    email: emailController.text,
+                                  );
+                                  ShowToast.show(
+                                      'Password reset email has been sent',
+                                      Colors.green,
+                                      Colors.white,
+                                      ToastGravity.BOTTOM);
+                                },
+                                child: const Text('Forgot password?',
+                                    style: TextStyle(
+                                        color: Colors.pink,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                            ),
+                            const SizedBox(height: 30),
                             Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),

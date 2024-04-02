@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -8,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:project/api/matchbyid_api.dart';
+import 'package:project/page/changepasswordpage.dart';
 import 'package:project/page/loginpage.dart';
 import 'package:project/page/matchinfopage.dart';
 import 'package:project/page/setusernamepage.dart';
@@ -64,6 +66,9 @@ class _ProfilePageState extends State<ProfilePage> {
           const SizedBox(height: 20),
           _buildCoinsSection(),
           _buildMatchFollowingsSection(),
+          FirebaseAuth.instance.currentUser!.photoURL != null
+              ? const SizedBox.shrink()
+              : _buildChangePasswordSection(),
           _buildSignOutSection()
         ]),
       ),
@@ -360,6 +365,33 @@ class _ProfilePageState extends State<ProfilePage> {
             );
           }
         });
+  }
+
+  Widget _buildChangePasswordSection() {
+    return InkWell(
+      onTap: () {
+        Get.to(() => const ChangePasswordPage(),
+            transition: Transition.rightToLeft);
+      },
+      child: Row(
+        children: [
+          Icon(
+            Icons.lock,
+            color: Colors.pink[800],
+            size: 30,
+          ),
+          const SizedBox(
+            width: 20,
+            height: 50,
+          ),
+          const Expanded(
+              child: Text(
+            'Change Password',
+            style: TextStyle(fontSize: 17),
+          )),
+        ],
+      ),
+    );
   }
 
   Widget _buildSignOutSection() {

@@ -186,7 +186,7 @@ class _HomePageState extends State<HomePage>
               padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
               child: Container(
                 color: Colors.white,
-                height: 280.0,
+                height: 270.0,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
