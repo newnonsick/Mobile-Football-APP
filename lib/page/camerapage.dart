@@ -25,7 +25,8 @@ class _CamearaPageState extends State<CamearaPage> {
   Offset _imagePosition = const Offset(0, 0);
 
   Future<void> initialCamera() async {
-    controller = CameraController(widget.cameras[0], ResolutionPreset.veryHigh);
+    controller =
+        CameraController(widget.cameras[0], ResolutionPreset.ultraHigh);
     _initializeControllerFuture = controller.initialize();
   }
 
@@ -123,15 +124,11 @@ class _CamearaPageState extends State<CamearaPage> {
       controller = CameraController(
           widget.cameras
               .firstWhere((camera) => camera.lensDirection == newDirection),
-          ResolutionPreset.veryHigh);
+          ResolutionPreset.ultraHigh);
       return controller.initialize();
     });
     setState(() {});
   }
-  // IconButton(
-  //           icon: const Icon(Icons.flip_camera_ios),
-  //           onPressed: _swapCamera,
-  //         ),
 
   @override
   Widget build(BuildContext context) {
@@ -209,70 +206,71 @@ class _CamearaPageState extends State<CamearaPage> {
                     ],
                   ),
                 ),
-                Container(
-                  color: Colors.black,
-                  height: MediaQuery.of(context).size.height * 0.19,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                          width: 50,
-                          height: 50,
+                Expanded(
+                  child: Container(
+                    color: Colors.black,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Consumer<CoinModel>(
+                                builder: (context, model, child) => Center(
+                                      child: Text(
+                                        _formatCoins(model.coins),
+                                        style: TextStyle(
+                                          color: Colors.pink[800],
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ))),
+                        Container(
+                          height: 70,
+                          width: 70,
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(50),
+                            border:
+                                Border.all(color: Colors.grey[800]!, width: 7),
                           ),
-                          child: Consumer<CoinModel>(
-                              builder: (context, model, child) => Center(
-                                child: Text(
-                                      _formatCoins(model.coins),
-                                      style: TextStyle(
-                                        color: Colors.pink[800],
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                              ))),
-                      Container(
-                        height: 70,
-                        width: 70,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(50),
-                          border:
-                              Border.all(color: Colors.grey[800]!, width: 7),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              icon: const Icon(
-                                Icons.circle,
-                                color: Colors.white,
-                                size: 38,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.circle,
+                                  color: Colors.white,
+                                  size: 38,
+                                ),
+                                onPressed: _takePicture,
                               ),
-                              onPressed: _takePicture,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[800]!,
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.flip_camera_ios,
-                            color: Colors.white,
+                            ],
                           ),
-                          onPressed: _swapCamera,
                         ),
-                      ),
-                    ],
+                        Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[800]!,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.flip_camera_ios,
+                              color: Colors.white,
+                            ),
+                            onPressed: _swapCamera,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -342,70 +340,71 @@ class _CamearaPageState extends State<CamearaPage> {
                       ),
                     ],
                   ),
-                  Container(
-                    color: Colors.black,
-                    height: MediaQuery.of(context).size.height * 0.19,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                            width: 50,
-                            height: 50,
+                  Expanded(
+                    child: Container(
+                      color: Colors.black,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Consumer<CoinModel>(
+                                  builder: (context, model, child) => Center(
+                                        child: Text(
+                                          _formatCoins(model.coins),
+                                          style: TextStyle(
+                                            color: Colors.pink[800],
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ))),
+                          Container(
+                            height: 70,
+                            width: 70,
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(50),
+                              border: Border.all(
+                                  color: Colors.grey[800]!, width: 7),
                             ),
-                            child: Consumer<CoinModel>(
-                                builder: (context, model, child) => Center(
-                                  child: Text(
-                                        _formatCoins(model.coins),
-                                        style: TextStyle(
-                                          color: Colors.pink[800],
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                ))),
-                        Container(
-                          height: 70,
-                          width: 70,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(50),
-                            border:
-                                Border.all(color: Colors.grey[800]!, width: 7),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.circle,
-                                  color: Colors.white,
-                                  size: 38,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.circle,
+                                    color: Colors.white,
+                                    size: 38,
+                                  ),
+                                  onPressed: _takePicture,
                                 ),
-                                onPressed: _takePicture,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[800]!,
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.flip_camera_ios,
-                              color: Colors.white,
+                              ],
                             ),
-                            onPressed: _swapCamera,
                           ),
-                        ),
-                      ],
+                          Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[800]!,
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.flip_camera_ios,
+                                color: Colors.white,
+                              ),
+                              onPressed: _swapCamera,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
