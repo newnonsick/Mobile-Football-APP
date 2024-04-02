@@ -57,13 +57,11 @@ class PictureLiveAndFinish extends StatelessWidget {
         Container(
             width: 420,
             height: 290,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 image: DecorationImage(
-                    image: const AssetImage(
-                        'assets/images/team_background.jpg'),
+                    image: AssetImage('assets/images/team_background.jpg'),
                     fit: BoxFit.cover,
-                    opacity: 0.9
-                        )),
+                    opacity: 0.9)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -106,9 +104,8 @@ class PictureLiveAndFinish extends StatelessWidget {
                                   color: Colors.grey,
                                   fontFamily: 'Kanit')),
                           TextSpan(
-                              text: match['status'] == 'FINISHED'
-                                  ? 'FT'
-                                  : 'LIVE',
+                              text:
+                                  match['status'] == 'FINISHED' ? 'FT' : 'LIVE',
                               style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
@@ -199,9 +196,11 @@ class PictureLiveAndFinish extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text('Powered by ',
-                    style: TextStyle(color: Colors.grey, fontSize: 10, fontFamily: 'Kanit')),
+                    style: TextStyle(
+                        color: Colors.grey, fontSize: 10, fontFamily: 'Kanit')),
                 const Text('LiveScore ',
-                    style: TextStyle(color: Colors.pink, fontSize: 10, fontFamily: 'Kanit')),
+                    style: TextStyle(
+                        color: Colors.pink, fontSize: 10, fontFamily: 'Kanit')),
                 Image.asset('assets/images/logo.png',
                     width: 15, height: 15, fit: BoxFit.contain)
               ],
