@@ -132,7 +132,7 @@ class _HomePageState extends State<HomePage>
                         color: _loadingAnimation.value,
                         child: const SizedBox(
                           width: 300.0,
-                          height: 250.0,
+                          height: 280.0,
                         ),
                       );
                     },
@@ -186,7 +186,7 @@ class _HomePageState extends State<HomePage>
               padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
               child: Container(
                 color: Colors.white,
-                height: 250.0,
+                height: 280.0,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

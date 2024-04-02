@@ -197,7 +197,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: Colors.grey[100],
                   ),
                   child: Column(children: [
-                    const SizedBox(height: 45, child: Text('Guesses Streak')),
+                    const SizedBox(height: 45, child: Text('Streak')),
                     Text('${data['correctStreak']}',
                         style: TextStyle(
                             fontWeight: FontWeight.bold,

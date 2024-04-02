@@ -49,6 +49,9 @@ class PictureLiveAndFinish extends StatelessWidget {
     bool isAwayWinner =
         match['score']['fullTime']['home'] < match['score']['fullTime']['away'];
 
+    bool isDraw = match['score']['fullTime']['home'] ==
+        match['score']['fullTime']['away'];
+
     return Stack(
       children: [
         Container(
@@ -57,10 +60,10 @@ class PictureLiveAndFinish extends StatelessWidget {
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: const AssetImage(
-                        'assets/images/out_image_background.jpg'),
+                        'assets/images/team_background.jpg'),
                     fit: BoxFit.cover,
-                    colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.6), BlendMode.darken))),
+                    opacity: 0.9
+                        )),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -71,11 +74,20 @@ class PictureLiveAndFinish extends StatelessWidget {
                       width: 108,
                       child: Column(
                         children: [
+                          isHomeWinner
+                              ? Image.asset('assets/images/crown.png',
+                                  width: 50, height: 50)
+                              : isDraw
+                                  ? Image.asset(
+                                      'assets/images/home_broken_crown.png',
+                                      width: 50,
+                                      height: 50)
+                                  : const SizedBox(width: 50, height: 50),
                           crestHomeWidget,
                           const SizedBox(height: 10),
                           Text(match['homeTeam']['shortName'],
                               style: const TextStyle(
-                                  color: Colors.white,
+                                  color: Colors.black,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'Kanit')),
                         ],
@@ -83,6 +95,7 @@ class PictureLiveAndFinish extends StatelessWidget {
                     ),
                     Column(
                       children: [
+                        const SizedBox(height: 30),
                         Text(
                             '▶▶ ${match['status'] == 'FINISHED' ? 'FT' : 'LIVE'} ◀◀',
                             style: const TextStyle(
@@ -98,15 +111,15 @@ class PictureLiveAndFinish extends StatelessWidget {
                                   fontSize: 50,
                                   fontWeight: FontWeight.bold,
                                   color: isHomeWinner
-                                      ? Colors.greenAccent
-                                      : Colors.white,
+                                      ? Colors.pink[800]
+                                      : Colors.black,
                                   fontFamily: 'Kanit')),
                           const TextSpan(
                               text: ' - ',
                               style: TextStyle(
                                   fontSize: 50,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: Colors.black,
                                   fontFamily: 'Kanit')),
                           TextSpan(
                               text: '${match['score']['fullTime']['away']}',
@@ -114,8 +127,8 @@ class PictureLiveAndFinish extends StatelessWidget {
                                   fontSize: 50,
                                   fontWeight: FontWeight.bold,
                                   color: isAwayWinner
-                                      ? Colors.greenAccent
-                                      : Colors.white,
+                                      ? Colors.pink[800]
+                                      : Colors.black,
                                   fontFamily: 'Kanit')),
                         ])),
                         const Text(' ',
@@ -130,11 +143,20 @@ class PictureLiveAndFinish extends StatelessWidget {
                       width: 108,
                       child: Column(
                         children: [
+                          isAwayWinner
+                              ? Image.asset('assets/images/crown.png',
+                                  width: 50, height: 50)
+                              : isDraw
+                                  ? Image.asset(
+                                      'assets/images/away_broken_crown.png',
+                                      width: 50,
+                                      height: 50)
+                                  : const SizedBox(width: 50, height: 50),
                           crestAwayWidget,
                           const SizedBox(height: 10),
                           Text(match['awayTeam']['shortName'],
                               style: const TextStyle(
-                                  color: Colors.white,
+                                  color: Colors.black,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'Kanit')),
                         ],
@@ -142,8 +164,10 @@ class PictureLiveAndFinish extends StatelessWidget {
                     ),
                   ],
                 ),
+                const SizedBox(height: 10),
                 const Text('Premier League',
-                    style: TextStyle(color: Colors.white, fontFamily: 'Kanit')),
+                    style: TextStyle(color: Colors.black, fontFamily: 'Kanit')),
+                const SizedBox(height: 10),
               ],
             )),
         Positioned(
