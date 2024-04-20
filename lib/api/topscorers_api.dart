@@ -26,7 +26,7 @@ class TopScorers {
 
 Future<TopScorers> fetchTopScorers() async {
   final response =
-      await http.get(Uri.parse('http://${dotenv.env['API_URL']}/getTopScorers'));
+      await http.get(Uri.parse('${dotenv.env['API_URL']}/getTopScorers'));
 
   if (response.statusCode == 200) {
     return TopScorers.fromJson(

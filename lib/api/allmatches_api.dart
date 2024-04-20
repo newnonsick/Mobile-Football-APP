@@ -23,7 +23,7 @@ class AllMatches {
 
 Future<AllMatches> fetchAllMatches() async {
   final response = await http
-      .get(Uri.parse('http://${dotenv.env['API_URL']}/getAllMatches'));
+      .get(Uri.parse('${dotenv.env['API_URL']}/getAllMatches'));
 
   if (response.statusCode == 200) {
     return AllMatches.fromJson(

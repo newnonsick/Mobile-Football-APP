@@ -13,7 +13,7 @@ class MatchByID {
 }
 
 Future<MatchByID> fetchMatchByID(List<int> matchIdList) async {
-  final Uri uri = Uri.parse('http://${dotenv.env['API_URL']}/getMatchById');
+  final Uri uri = Uri.parse('${dotenv.env['API_URL']}/getMatchById');
 
   final jsonBody = json.encode({'list_match_id': matchIdList});
 

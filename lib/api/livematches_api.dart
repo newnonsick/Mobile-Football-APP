@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class LiveMatches {
   final List<dynamic> matches;
@@ -18,7 +18,7 @@ class LiveMatches {
 
 Future<LiveMatches> fetchLiveMatches() async {
   final response =
-      await http.get(Uri.parse('http://132.145.68.135:6010/getLiveMatches'));
+      await http.get(Uri.parse('${dotenv.env['API_URL']}/getLiveMatches'));
 
   if (response.statusCode == 200) {
     return LiveMatches.fromJson(jsonDecode(response.body) as List<dynamic>);

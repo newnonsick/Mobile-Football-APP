@@ -13,7 +13,7 @@ class MatchesOfDay {
 }
 
 Future<MatchesOfDay> fetchMatchesOfDay(String date, String timezone) async {
-  final Uri uri = Uri.parse('http://${dotenv.env['API_URL']}/getMatch/$date');
+  final Uri uri = Uri.parse('${dotenv.env['API_URL']}/getMatch/$date');
   final Map<String, String> queryParams = {'timezone': timezone};
   final Uri uriWithParams = uri.replace(queryParameters: queryParams);
 

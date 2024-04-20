@@ -13,8 +13,8 @@ class UpcomingMatches {
 }
 
 Future<UpcomingMatches> fetchUpcomingMatches() async {
-  final response = await http
-      .get(Uri.parse('http://${dotenv.env['API_URL']}/getUpcomingMatches'));
+  final response =
+      await http.get(Uri.parse('${dotenv.env['API_URL']}/getUpcomingMatches'));
 
   if (response.statusCode == 200) {
     return UpcomingMatches.fromJson(jsonDecode(response.body) as List<dynamic>);
