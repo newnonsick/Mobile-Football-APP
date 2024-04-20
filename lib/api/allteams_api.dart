@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AllTeams {
   final int count;
@@ -21,7 +22,7 @@ class AllTeams {
 
 Future<AllTeams> fetchAllTeams() async {
   final response =
-      await http.get(Uri.parse('http://132.145.68.135:6010/getAllTeams'));
+      await http.get(Uri.parse('http://${dotenv.env['API_URL']}/getAllTeams'));
 
   if (response.statusCode == 200) {
     return AllTeams.fromJson(jsonDecode(response.body) as Map<String, dynamic>);

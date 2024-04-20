@@ -10,10 +10,12 @@ import 'package:project/page/setusernamepage.dart';
 import 'package:project/provider/coins_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeFirebase();
+  await dotenv.load(fileName: '.env');
   runApp(const MyApp());
 }
 
@@ -22,7 +24,7 @@ Future<void> initializeFirebase() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();

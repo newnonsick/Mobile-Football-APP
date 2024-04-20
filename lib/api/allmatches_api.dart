@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AllMatches {
   final Map<String, dynamic> competition;
@@ -21,11 +22,12 @@ class AllMatches {
 }
 
 Future<AllMatches> fetchAllMatches() async {
-  final response = await http.get(Uri.parse(
-      'http://132.145.68.135:6010/getAllMatches'));
+  final response = await http
+      .get(Uri.parse('http://${dotenv.env['API_URL']}/getAllMatches'));
 
   if (response.statusCode == 200) {
-    return AllMatches.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    return AllMatches.fromJson(
+        jsonDecode(response.body) as Map<String, dynamic>);
   } else {
     throw Exception('Failed to load AllMatches');
   }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class UpcomingMatches {
   final List<dynamic> matches;
@@ -12,8 +13,8 @@ class UpcomingMatches {
 }
 
 Future<UpcomingMatches> fetchUpcomingMatches() async {
-  final response =
-      await http.get(Uri.parse('http://132.145.68.135:6010/getUpcomingMatches'));
+  final response = await http
+      .get(Uri.parse('http://${dotenv.env['API_URL']}/getUpcomingMatches'));
 
   if (response.statusCode == 200) {
     return UpcomingMatches.fromJson(jsonDecode(response.body) as List<dynamic>);

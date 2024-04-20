@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Standings {
   final Map<String, dynamic> area;
@@ -24,7 +25,7 @@ class Standings {
 
 Future<Standings> fetchStandings() async {
   final response =
-      await http.get(Uri.parse('http://132.145.68.135:6010/getStandings'));
+      await http.get(Uri.parse('http://${dotenv.env['API_URL']}/getStandings'));
 
   if (response.statusCode == 200) {
     return Standings.fromJson(

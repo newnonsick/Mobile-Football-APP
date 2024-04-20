@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MatchByID {
   final List<dynamic> matches;
@@ -12,7 +13,7 @@ class MatchByID {
 }
 
 Future<MatchByID> fetchMatchByID(List<int> matchIdList) async {
-  final Uri uri = Uri.parse('http://132.145.68.135:6010/getMatchById');
+  final Uri uri = Uri.parse('http://${dotenv.env['API_URL']}/getMatchById');
 
   final jsonBody = json.encode({'list_match_id': matchIdList});
 
