@@ -37,9 +37,6 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _firebaseMessaging.requestPermission();
-    _firebaseMessaging.getToken().then((token) {
-      print('Token: $token');
-    });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       setState(() {});

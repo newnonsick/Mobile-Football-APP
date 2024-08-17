@@ -8,6 +8,7 @@ import 'package:project/page/teaminfopage.dart';
 import 'package:project/provider/coins_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AllTeamsPage extends StatefulWidget {
   const AllTeamsPage({super.key});
@@ -28,18 +29,18 @@ class _AllTeamsPageState extends State<AllTeamsPage>
     super.initState();
     futureAllTeams = fetchAllTeams();
 
-    socket = io.io('http://132.145.68.135:6010', <String, dynamic>{
+    socket = io.io('${dotenv.env['API_URL']}', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });
 
-    socket.on('connect', (_) {
-      print('allteam connected');
-    });
+    // socket.on('connect', (_) {
+    //   print('allteam connected');
+    // });
 
-    socket.on('disconnect', (_) {
-      print('allteam disconnected');
-    });
+    // socket.on('disconnect', (_) {
+    //   print('allteam disconnected');
+    // });
 
     socket.on('update_all_teams', (data) {
       setState(() {

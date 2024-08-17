@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:project/api/standings_api.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class StandingPage extends StatefulWidget {
-  const StandingPage({Key? key}) : super(key: key);
+  const StandingPage({super.key});
 
   @override
   State<StandingPage> createState() => _StandingPageState();
@@ -21,18 +22,18 @@ class _StandingPageState extends State<StandingPage> {
     super.initState();
     futureStandings = fetchStandings();
 
-    socket = io.io('http://132.145.68.135:6010', <String, dynamic>{
+    socket = io.io('${dotenv.env['API_URL']}', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });
 
-    socket.on('connect', (_) {
-      print('standing connected');
-    });
+    // socket.on('connect', (_) {
+    //   print('standing connected');
+    // });
 
-    socket.on('disconnect', (_) {
-      print('standing disconnected');
-    });
+    // socket.on('disconnect', (_) {
+    //   print('standing disconnected');
+    // });
 
     socket.on('update_table', (data) {
       setState(() {
@@ -60,7 +61,6 @@ class _StandingPageState extends State<StandingPage> {
                 : const CircularProgressIndicator(),
           );
         } else if (snapshot.hasError) {
-          print(snapshot.error);
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

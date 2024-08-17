@@ -7,6 +7,7 @@ import 'package:palette_generator/palette_generator.dart';
 import 'package:project/api/topscorers_api.dart';
 import 'package:project/page/playerpage.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class StatisticsPage extends StatefulWidget {
   const StatisticsPage({super.key});
@@ -35,18 +36,18 @@ class _StatisticsPageState extends State<StatisticsPage>
     _loadingAnimation = ColorTween(begin: Colors.white, end: Colors.grey[300])
         .animate(_loadingController);
 
-    socket = io.io('http://132.145.68.135:6010', <String, dynamic>{
+    socket = io.io('${dotenv.env['API_URL']}', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });
 
-    socket.on('connect', (_) {
-      print('statistic connected');
-    });
+    // socket.on('connect', (_) {
+    //   print('statistic connected');
+    // });
 
-    socket.on('disconnect', (_) {
-      print('statistic disconnected');
-    });
+    // socket.on('disconnect', (_) {
+    //   print('statistic disconnected');
+    // });
 
     socket.on('update_top_scorers', (data) {
       setState(() {
@@ -207,7 +208,6 @@ class _StatisticsPageState extends State<StatisticsPage>
                   );
                 });
           } else if (snapshot.hasError) {
-            print(snapshot.error);
             return SizedBox(
               height: 150.0,
               child: Column(

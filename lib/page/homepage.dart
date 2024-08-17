@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project/widget/finishedmatchitem.dart';
@@ -9,6 +8,7 @@ import 'allmatchpage.dart';
 import '../api/upcomingmatches_api.dart';
 import '../api/livematches_api.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -42,18 +42,18 @@ class _HomePageState extends State<HomePage>
     futureUpcomingMatches = fetchUpcomingMatches();
     super.initState();
 
-    socket = io.io('http://132.145.68.135:6010/', <String, dynamic>{
+    socket = io.io('${dotenv.env['API_URL']}', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });
 
-    socket.on('connect', (_) {
-      print('homepage connected');
-    });
+    // socket.on('connect', (_) {
+    //   print('homepage connected');
+    // });
 
-    socket.on('disconnect', (_) {
-      print('homepage disconnected');
-    });
+    // socket.on('disconnect', (_) {
+    //   print('homepage disconnected');
+    // });
 
     socket.on('update_live_matches', (data) {
       setState(() {
@@ -78,10 +78,6 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    if (FirebaseAuth.instance.currentUser != null) {
-      print(FirebaseAuth.instance.currentUser?.uid);
-    }
-
     return Container(
       color: Colors.white,
       child: Column(
@@ -313,7 +309,32 @@ class _HomePageState extends State<HomePage>
             );
           } else if (snapshot.hasData) {
             if (snapshot.data!.matches.isEmpty) {
-              return Container();
+              return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Matches',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20.0,
+                              ),
+                            ),
+                            TextButton(
+                                onPressed: () {
+                                  Get.to(() => const AllMatchPage(),
+                                      transition: Transition.rightToLeft);
+                                },
+                                child: Text('See All',
+                                    style: TextStyle(
+                                        color: Colors.pink[800], fontSize: 15)))
+                          ]),
+                    )
+                  ]);
             } else {
               return Expanded(
                 child: Column(
