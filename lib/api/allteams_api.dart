@@ -21,8 +21,8 @@ class AllTeams {
 }
 
 Future<AllTeams> fetchAllTeams() async {
-  final response =
-      await http.get(Uri.parse('${dotenv.env['API_URL']}/getAllTeams'));
+  final response = await http.get(
+      Uri.parse('https://corsproxy.io/?${dotenv.env['API_URL']}/getAllTeams'));
 
   if (response.statusCode == 200) {
     return AllTeams.fromJson(jsonDecode(response.body) as Map<String, dynamic>);

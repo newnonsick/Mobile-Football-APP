@@ -24,8 +24,8 @@ class Standings {
 }
 
 Future<Standings> fetchStandings() async {
-  final response =
-      await http.get(Uri.parse('${dotenv.env['API_URL']}/getStandings'));
+  final response = await http.get(
+      Uri.parse('https://corsproxy.io/?${dotenv.env['API_URL']}/getStandings'));
 
   if (response.statusCode == 200) {
     return Standings.fromJson(
@@ -33,7 +33,6 @@ Future<Standings> fetchStandings() async {
   } else {
     throw Exception('Failed to load Standings');
   }
-
 }
 
 Future<Standings> parseStandings(dynamic data) async {
@@ -43,4 +42,3 @@ Future<Standings> parseStandings(dynamic data) async {
     throw Exception('Failed to parse Standings: $e');
   }
 }
-

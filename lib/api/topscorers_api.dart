@@ -9,7 +9,6 @@ class TopScorers {
   final List<dynamic> scorers;
   final Map<String, dynamic> season;
 
-
   const TopScorers(
       this.competition, this.filters, this.scorers, this.season, this.count);
 
@@ -25,8 +24,8 @@ class TopScorers {
 }
 
 Future<TopScorers> fetchTopScorers() async {
-  final response =
-      await http.get(Uri.parse('${dotenv.env['API_URL']}/getTopScorers'));
+  final response = await http.get(Uri.parse(
+      'https://corsproxy.io/?${dotenv.env['API_URL']}/getTopScorers'));
 
   if (response.statusCode == 200) {
     return TopScorers.fromJson(

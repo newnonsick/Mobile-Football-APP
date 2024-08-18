@@ -43,7 +43,7 @@ Future<SearchPlayer> fetchSearchPlayer(String playerName) async {
 
   final response = await http.get(
     Uri.parse(
-        'https://footballapi.pulselive.com/search/PremierLeague/?terms=$playerName,$playerName*&type=player&size=10&start=0&fullObjectResponse=true'),
+        'https://corsproxy.io/?https://footballapi.pulselive.com/search/PremierLeague/?terms=$playerName,$playerName*&type=player&size=10&start=0&fullObjectResponse=true'),
     headers: headers,
   );
 

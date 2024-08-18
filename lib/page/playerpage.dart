@@ -5,7 +5,7 @@ import 'package:palette_generator/palette_generator.dart';
 class PlayerPage extends StatefulWidget {
   final Map player;
 
-  const PlayerPage({Key? key, required this.player}) : super(key: key);
+  const PlayerPage({super.key, required this.player});
 
   @override
   State<PlayerPage> createState() => _PlayerPageState();
@@ -30,7 +30,7 @@ class _PlayerPageState extends State<PlayerPage> {
           FutureBuilder<PaletteGenerator>(
             future: PaletteGenerator.fromImageProvider(
               NetworkImage(
-                  'https://resources.premierleague.com/premierleague/photos/players/110x140/${widget.player['altIds']['opta']}.png',
+                  'https://corsproxy.io/?https://resources.premierleague.com/premierleague/photos/players/110x140/${widget.player['altIds']['opta']}.png',
                   scale: 0.5),
             ),
             builder: (context, snapshot) {
@@ -140,10 +140,11 @@ class _PlayerPageState extends State<PlayerPage> {
                                           .toString()
                                           .split(' ')[1],
                                       style: TextStyle(
-                                        color: backgroundColor.computeLuminance() >
+                                        color:
+                                            backgroundColor.computeLuminance() >
                                                     0.5
-                                            ? Colors.black
-                                            : Colors.white,
+                                                ? Colors.black
+                                                : Colors.white,
                                         fontSize: 28,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -160,10 +161,11 @@ class _PlayerPageState extends State<PlayerPage> {
                                   Text(
                                     widget.player['currentTeam']['shortName'],
                                     style: TextStyle(
-                                      color: backgroundColor.computeLuminance() >
+                                      color:
+                                          backgroundColor.computeLuminance() >
                                                   0.5
-                                          ? Colors.black
-                                          : Colors.white,
+                                              ? Colors.black
+                                              : Colors.white,
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -173,9 +175,10 @@ class _PlayerPageState extends State<PlayerPage> {
                               Text(
                                 widget.player['info']['shirtNum'].toString(),
                                 style: TextStyle(
-                                  color: backgroundColor.computeLuminance() > 0.5
-                                      ? Colors.black
-                                      : Colors.white,
+                                  color:
+                                      backgroundColor.computeLuminance() > 0.5
+                                          ? Colors.black
+                                          : Colors.white,
                                   fontSize: 40,
                                   fontWeight: FontWeight.bold,
                                 ),
