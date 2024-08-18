@@ -25,7 +25,7 @@ class TopScorers {
 
 Future<TopScorers> fetchTopScorers() async {
   final response = await http.get(Uri.parse(
-      'https://corsproxy.io/?${dotenv.env['API_URL']}/getTopScorers'));
+      '${dotenv.env['API_URL']}/getTopScorers'));
 
   if (response.statusCode == 200) {
     return TopScorers.fromJson(

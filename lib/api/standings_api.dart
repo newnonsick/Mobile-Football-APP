@@ -25,7 +25,7 @@ class Standings {
 
 Future<Standings> fetchStandings() async {
   final response = await http.get(
-      Uri.parse('https://corsproxy.io/?${dotenv.env['API_URL']}/getStandings'));
+      Uri.parse('${dotenv.env['API_URL']}/getStandings'));
 
   if (response.statusCode == 200) {
     return Standings.fromJson(

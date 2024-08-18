@@ -18,7 +18,7 @@ class LiveMatches {
 
 Future<LiveMatches> fetchLiveMatches() async {
   final response = await http.get(Uri.parse(
-      'https://corsproxy.io/?${dotenv.env['API_URL']}/getLiveMatches'));
+      '${dotenv.env['API_URL']}/getLiveMatches'));
 
   if (response.statusCode == 200) {
     return LiveMatches.fromJson(jsonDecode(response.body) as List<dynamic>);

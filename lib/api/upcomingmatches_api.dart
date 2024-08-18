@@ -14,7 +14,7 @@ class UpcomingMatches {
 
 Future<UpcomingMatches> fetchUpcomingMatches() async {
   final response = await http.get(Uri.parse(
-      'https://corsproxy.io/?${dotenv.env['API_URL']}/getUpcomingMatches'));
+      '${dotenv.env['API_URL']}/getUpcomingMatches'));
 
   if (response.statusCode == 200) {
     return UpcomingMatches.fromJson(jsonDecode(response.body) as List<dynamic>);
