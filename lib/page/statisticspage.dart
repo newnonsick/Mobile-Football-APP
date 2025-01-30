@@ -66,7 +66,9 @@ class _StatisticsPageState extends State<StatisticsPage>
 
   @override
   Widget build(BuildContext context) {
-    return _buildTopScorers();
+    return Container(
+      color: Colors.white,
+      child: _buildTopScorers());
   }
 
   Widget _buildTopScorers() {
@@ -189,7 +191,7 @@ class _StatisticsPageState extends State<StatisticsPage>
     return FutureBuilder<PaletteGenerator>(
         future: PaletteGenerator.fromImageProvider(
           NetworkImage(
-            'https://corsproxy.io/?https://resources.premierleague.com/premierleague/photos/players/110x140/${scorer['moreInfo']['altIds']['opta']}.png',
+            'https://resources.premierleague.com/premierleague/photos/players/110x140/${scorer['moreInfo']['altIds']['opta']}.png',
           ),
         ),
         builder: (context, snapshot) {
@@ -288,16 +290,17 @@ class _StatisticsPageState extends State<StatisticsPage>
                                   Text(
                                     '1',
                                     style: TextStyle(
-                                        color: imageColor.computeLuminance() >
-                                                    0.5
-                                            ? Colors.black
-                                            : Colors.white,
+                                        color:
+                                            imageColor.computeLuminance() > 0.5
+                                                ? Colors.black
+                                                : Colors.white,
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Text(scorer['player']['name'],
                                       style: TextStyle(
-                                          color: imageColor.computeLuminance() > 0.5
+                                          color: imageColor.computeLuminance() >
+                                                  0.5
                                               ? Colors.black
                                               : Colors.white,
                                           fontSize: 20,
@@ -306,12 +309,12 @@ class _StatisticsPageState extends State<StatisticsPage>
                                     children: [
                                       scorer['team']['crest'].endsWith('.svg')
                                           ? SvgPicture.network(
-                                              "https://corsproxy.io/?${scorer['team']['crest']}",
+                                              "${scorer['team']['crest']}",
                                               width: 25,
                                               height: 25,
                                               fit: BoxFit.contain)
                                           : Image.network(
-                                              "https://corsproxy.io/?${scorer['team']['crest']}",
+                                              "${scorer['team']['crest']}",
                                               width: 25,
                                               height: 25,
                                               fit: BoxFit.contain),
@@ -319,7 +322,8 @@ class _StatisticsPageState extends State<StatisticsPage>
                                       Text(
                                         scorer['team']['shortName'],
                                         style: TextStyle(
-                                          color: imageColor.computeLuminance() > 0.5
+                                          color: imageColor.computeLuminance() >
+                                                  0.5
                                               ? Colors.black
                                               : Colors.white,
                                           fontSize: 15,
@@ -330,7 +334,8 @@ class _StatisticsPageState extends State<StatisticsPage>
                                   ),
                                   Text(scorer['goals'].toString(),
                                       style: TextStyle(
-                                          color: imageColor.computeLuminance() > 0.5
+                                          color: imageColor.computeLuminance() >
+                                                  0.5
                                               ? Colors.black
                                               : Colors.white,
                                           fontSize: 40,
@@ -339,7 +344,7 @@ class _StatisticsPageState extends State<StatisticsPage>
                               ),
                             ),
                             Image.network(
-                              'https://corsproxy.io/?https://resources.premierleague.com/premierleague/photos/players/110x140/${scorer['moreInfo']['altIds']['opta']}.png',
+                              'https://resources.premierleague.com/premierleague/photos/players/110x140/${scorer['moreInfo']['altIds']['opta']}.png',
                               fit: BoxFit.contain,
                               height: 150,
                               width: 150,
@@ -402,7 +407,7 @@ class _StatisticsPageState extends State<StatisticsPage>
                         radius: 30,
                         backgroundColor: Colors.pink[800],
                         child: Image.network(
-                          'https://corsproxy.io/?https://resources.premierleague.com/premierleague/photos/players/250x250/${scorers['moreInfo']['altIds']['opta']}.png',
+                          'https://resources.premierleague.com/premierleague/photos/players/250x250/${scorers['moreInfo']['altIds']['opta']}.png',
                           fit: BoxFit.contain,
                           height: 60,
                           width: 60,
@@ -426,12 +431,11 @@ class _StatisticsPageState extends State<StatisticsPage>
                             children: [
                               scorers['team']['crest'].endsWith('.svg')
                                   ? SvgPicture.network(
-                                      "https://corsproxy.io/?${scorers['team']['crest']}",
+                                      "${scorers['team']['crest']}",
                                       width: 20,
                                       height: 20,
                                       fit: BoxFit.contain)
-                                  : Image.network(
-                                      "https://corsproxy.io/?${scorers['team']['crest']}",
+                                  : Image.network("${scorers['team']['crest']}",
                                       width: 20,
                                       height: 20,
                                       fit: BoxFit.contain),

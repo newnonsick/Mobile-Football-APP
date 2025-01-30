@@ -23,8 +23,7 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
   }
 
   Future<void> _generatePalette() async {
-    final imageProvider =
-        NetworkImage("https://corsproxy.io/?${widget.team['crest']}");
+    final imageProvider = NetworkImage("${widget.team['crest']}");
 
     _paletteGenerator = await PaletteGenerator.fromImageProvider(
       imageProvider,
@@ -38,7 +37,7 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    String crestTeamUrl = 'https://corsproxy.io/?${widget.team['crest']}';
+    String crestTeamUrl = '${widget.team['crest']}';
     Widget crestTeamWidget;
 
     if (crestTeamUrl.endsWith('.svg')) {
@@ -169,7 +168,8 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
                                 ),
                                 const SizedBox(width: 5),
                                 SizedBox(
-                                  width: MediaQuery.of(context).size.width / 1.8,
+                                  width:
+                                      MediaQuery.of(context).size.width / 1.8,
                                   child: Text(
                                     team['venue'],
                                     style: TextStyle(
@@ -198,7 +198,7 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
                                 ),
                                 const SizedBox(width: 10),
                                 SvgPicture.network(
-                                  'https://corsproxy.io/?${team['area']['flag']}',
+                                  '${team['area']['flag']}',
                                   width: 20,
                                   height: 20,
                                   fit: BoxFit.contain,
@@ -215,7 +215,8 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
                                 ),
                                 const SizedBox(width: 5),
                                 SizedBox(
-                                  width: MediaQuery.of(context).size.width / 1.9,
+                                  width:
+                                      MediaQuery.of(context).size.width / 1.9,
                                   child: Text(
                                     team['clubColors'].toString(),
                                     style: TextStyle(
@@ -241,7 +242,10 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
                                       return InkWell(
                                         onTap: followLink,
                                         child: SizedBox(
-                                          width: MediaQuery.of(context).size.width / 1.8,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              1.8,
                                           child: Text(
                                             team['website'],
                                             style: TextStyle(
@@ -343,7 +347,7 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
                                   ? Colors.white
                                   : Colors.transparent,
                               child: Image.network(
-                                'https://corsproxy.io/?${competition['emblem']}',
+                                '${competition['emblem']}',
                                 width: 30,
                                 height: 30,
                                 fit: BoxFit.contain,

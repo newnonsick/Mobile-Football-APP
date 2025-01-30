@@ -19,46 +19,49 @@ class _InfoPageState extends State<InfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 4,
-      child: Column(
-        children: [
-          TabBar(
-            indicatorColor: Colors.pink[800],
-            tabs: [
-              Tab(
-                icon: Icon(
-                  Icons.table_chart,
-                  color: Colors.pink[800],
+    return Container(
+      color: Colors.white,
+      child: DefaultTabController(
+        length: 4,
+        child: Column(
+          children: [
+            TabBar(
+              indicatorColor: Colors.pink[800],
+              tabs: [
+                Tab(
+                  icon: Icon(
+                    Icons.table_chart,
+                    color: Colors.pink[800],
+                  ),
                 ),
-              ),
-              Tab(
-                icon: Icon(
-                  Icons.star,
-                  color: Colors.pink[800],
+                Tab(
+                  icon: Icon(
+                    Icons.star,
+                    color: Colors.pink[800],
+                  ),
                 ),
-              ),
-              Tab(
-                child: Text('Clubs', style: TextStyle(color: Colors.pink[800], fontWeight: FontWeight.bold),),),
-              Tab(
-                icon: Icon(
-                  Icons.search,
-                  color: Colors.pink[800],
+                Tab(
+                  child: Text('Clubs', style: TextStyle(color: Colors.pink[800], fontWeight: FontWeight.bold),),),
+                Tab(
+                  icon: Icon(
+                    Icons.search,
+                    color: Colors.pink[800],
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const Expanded(
-            child: TabBarView(
-              children: [
-                StandingPage(),
-                StatisticsPage(),
-                AllTeamsPage(),
-                SearchPlayerPage(),
               ],
             ),
-          ),
-        ],
+            const Expanded(
+              child: TabBarView(
+                children: [
+                  StandingPage(),
+                  StatisticsPage(),
+                  AllTeamsPage(),
+                  SearchPlayerPage(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

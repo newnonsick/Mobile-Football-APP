@@ -45,11 +45,9 @@ class _UpcomingMatchesItemState extends State<UpcomingMatchesItem>
     String formattedDate = DateFormat('dd MMM yyyy').format(utcDate.toLocal());
     String formattedTime = DateFormat('HH:mm').format(utcDate.toLocal());
 
-    String crestHomeUrl =
-        'https://corsproxy.io/?${widget.match['homeTeam']['crest']}';
+    String crestHomeUrl = '${widget.match['homeTeam']['crest']}';
     Widget crestHomeWidget;
-    String crestAwayUrl =
-        'https://corsproxy.io/?${widget.match['awayTeam']['crest']}';
+    String crestAwayUrl = '${widget.match['awayTeam']['crest']}';
     Widget crestAwayWidget;
 
     if (crestHomeUrl.endsWith('.svg')) {

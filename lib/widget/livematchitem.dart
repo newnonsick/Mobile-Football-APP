@@ -15,11 +15,9 @@ class LiveMatchItem extends StatefulWidget {
 class _LiveMatchItemState extends State<LiveMatchItem> {
   @override
   Widget build(BuildContext context) {
-    String crestHomeUrl =
-        'https://corsproxy.io/?${widget.match['homeTeam']['crest']}';
+    String crestHomeUrl = '${widget.match['homeTeam']['crest']}';
     Widget crestHomeWidget;
-    String crestAwayUrl =
-        'https://corsproxy.io/?${widget.match['awayTeam']['crest']}';
+    String crestAwayUrl = '${widget.match['awayTeam']['crest']}';
     Widget crestAwayWidget;
 
     if (crestHomeUrl.endsWith('.svg')) {
@@ -117,16 +115,19 @@ class _LiveMatchItemState extends State<LiveMatchItem> {
               children: [
                 SizedBox(
                   width: 115.0,
-                  child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    SizedBox(height: 90.0, width: 90.0, child: crestHomeWidget),
-                    const SizedBox(height: 10.0),
-                    Text(widget.match['homeTeam']['shortName'],
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold))
-                  ]),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        SizedBox(
+                            height: 90.0, width: 90.0, child: crestHomeWidget),
+                        const SizedBox(height: 10.0),
+                        Text(widget.match['homeTeam']['shortName'],
+                            style: const TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold))
+                      ]),
                 ),
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                   RichText(
@@ -158,16 +159,19 @@ class _LiveMatchItemState extends State<LiveMatchItem> {
                 ]),
                 SizedBox(
                   width: 115.0,
-                  child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    SizedBox(height: 90.0, width: 90.0, child: crestAwayWidget),
-                    const SizedBox(height: 10.0),
-                    Text(widget.match['awayTeam']['shortName'],
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold)),
-                  ]),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        SizedBox(
+                            height: 90.0, width: 90.0, child: crestAwayWidget),
+                        const SizedBox(height: 10.0),
+                        Text(widget.match['awayTeam']['shortName'],
+                            style: const TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold)),
+                      ]),
                 ),
               ],
             ),

@@ -84,11 +84,9 @@ class _MatchInfoPageState extends State<MatchInfoPage> {
   }
 
   Widget _buildLiveAndFinishTopSection() {
-    String crestHomeUrl =
-        'https://corsproxy.io/?${widget.match['homeTeam']['crest']}';
+    String crestHomeUrl = '${widget.match['homeTeam']['crest']}';
     Widget crestHomeWidget;
-    String crestAwayUrl =
-        'https://corsproxy.io/?${widget.match['awayTeam']['crest']}';
+    String crestAwayUrl = '${widget.match['awayTeam']['crest']}';
     Widget crestAwayWidget;
 
     if (crestHomeUrl.endsWith('.svg')) {
@@ -309,11 +307,9 @@ class _MatchInfoPageState extends State<MatchInfoPage> {
     String formattedDate = DateFormat('dd MMMM yyyy').format(utcDate.toLocal());
     String formattedTime = DateFormat('HH:mm').format(utcDate.toLocal());
 
-    String crestHomeUrl =
-        'https://corsproxy.io/?${widget.match['homeTeam']['crest']}';
+    String crestHomeUrl = '${widget.match['homeTeam']['crest']}';
     Widget crestHomeWidget;
-    String crestAwayUrl =
-        'https://corsproxy.io/?${widget.match['awayTeam']['crest']}';
+    String crestAwayUrl = '${widget.match['awayTeam']['crest']}';
     Widget crestAwayWidget;
 
     if (crestHomeUrl.endsWith('.svg')) {
@@ -455,11 +451,9 @@ class _MatchInfoPageState extends State<MatchInfoPage> {
     String formattedDate = DateFormat('dd MMMM yyyy').format(utcDate.toLocal());
     String formattedTime = DateFormat('HH:mm').format(utcDate.toLocal());
 
-    String crestHomeUrl =
-        'https://corsproxy.io/?${widget.match['homeTeam']['crest']}';
+    String crestHomeUrl = '${widget.match['homeTeam']['crest']}';
     Widget crestHomeWidget;
-    String crestAwayUrl =
-        'https://corsproxy.io/?${widget.match['awayTeam']['crest']}';
+    String crestAwayUrl = '${widget.match['awayTeam']['crest']}';
     Widget crestAwayWidget;
 
     if (crestHomeUrl.endsWith('.svg')) {
@@ -567,10 +561,8 @@ class _MatchInfoPageState extends State<MatchInfoPage> {
                         fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 10),
-                  Image.network(
-                      "https://corsproxy.io/?${match['competition']['emblem']}",
-                      width: 30,
-                      height: 30),
+                  Image.network("${match['competition']['emblem']}",
+                      width: 30, height: 30),
                 ],
               ),
               const SizedBox(height: 10),

@@ -51,154 +51,156 @@ class _StandingPageState extends State<StandingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: futureStandings,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: Platform.isIOS
-                ? const CupertinoActivityIndicator()
-                : const CircularProgressIndicator(),
-          );
-        } else if (snapshot.hasError) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Something went wrong',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  elevation: 0,
-                  shadowColor: Colors.white,
+    return Container(
+      color: Colors.white,
+      child: FutureBuilder(
+        future: futureStandings,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: Platform.isIOS
+                  ? const CupertinoActivityIndicator()
+                  : const CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'Something went wrong',
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                onPressed: () {
-                  setState(() {
-                    futureStandings = fetchStandings();
-                  });
-                },
-                child: Text(
-                  'Retry',
-                  style: TextStyle(color: Colors.pink[800]),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    elevation: 0,
+                    shadowColor: Colors.white,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      futureStandings = fetchStandings();
+                    });
+                  },
+                  child: Text(
+                    'Retry',
+                    style: TextStyle(color: Colors.pink[800]),
+                  ),
                 ),
-              ),
-            ],
-          );
-        } else if (snapshot.hasData) {
-          return SingleChildScrollView(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: DataTable(
-                columnSpacing: MediaQuery.of(context).size.width < 585
-                    ? 15
-                    : MediaQuery.of(context).size.width / 14.1,
-                columns: const [
-                  DataColumn(
-                    label: Text('Club',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                  ),
-                  DataColumn(
-                    label: Text('Played',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    numeric: true,
-                  ),
-                  DataColumn(
-                    label: Text('Won',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    numeric: true,
-                  ),
-                  DataColumn(
-                    label: Text('Draw',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    numeric: true,
-                  ),
-                  DataColumn(
-                    label: Text('Lost',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    numeric: true,
-                  ),
-                  DataColumn(
-                    label: Text('GF',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    numeric: true,
-                  ),
-                  DataColumn(
-                    label: Text('GA',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    numeric: true,
-                  ),
-                  DataColumn(
-                    label: Text('GD',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    numeric: true,
-                  ),
-                  DataColumn(
-                    label: Text('Points',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    numeric: true,
-                  ),
-                ],
-                rows: [
-                  for (var club in snapshot.data!.standings[0]['table'])
-                    DataRow(
-                      cells: [
-                        DataCell(Row(
-                          children: [
-                            SizedBox(
-                              width: 20,
-                              child: Text(
-                                  club['position'] < 10
-                                      ? '  ${club['position']}'
-                                      : '${club['position']}',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                            const SizedBox(width: 10),
-                            SizedBox(
-                              width: 30,
-                              height: 30,
-                              child: club['team']['crest'].endsWith('.svg')
-                                  ? SvgPicture.network(
-                                      "https://corsproxy.io/?${club['team']['crest']}",
-                                      width: 30,
-                                      height: 30,
-                                      fit: BoxFit.contain)
-                                  : Image.network(
-                                      "https://corsproxy.io/?${club['team']['crest']}",
-                                      width: 30,
-                                      height: 30,
-                                      fit: BoxFit.contain),
-                            ),
-                            const SizedBox(width: 10),
-                            Text(club['team']['shortName'],
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold))
-                          ],
-                        )),
-                        DataCell(Text(club['playedGames'].toString())),
-                        DataCell(Text(club['won'].toString())),
-                        DataCell(Text(club['draw'].toString())),
-                        DataCell(Text(club['lost'].toString())),
-                        DataCell(Text(club['goalsFor'].toString())),
-                        DataCell(Text(club['goalsAgainst'].toString())),
-                        DataCell(Text(club['goalDifference'].toString())),
-                        DataCell(Text(
-                          club['points'].toString(),
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        )),
-                      ],
+              ],
+            );
+          } else if (snapshot.hasData) {
+            return SingleChildScrollView(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: DataTable(
+                  columnSpacing: MediaQuery.of(context).size.width < 585
+                      ? 15
+                      : MediaQuery.of(context).size.width / 14.1,
+                  columns: const [
+                    DataColumn(
+                      label: Text('Club',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
-                ],
+                    DataColumn(
+                      label: Text('Played',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      numeric: true,
+                    ),
+                    DataColumn(
+                      label: Text('Won',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      numeric: true,
+                    ),
+                    DataColumn(
+                      label: Text('Draw',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      numeric: true,
+                    ),
+                    DataColumn(
+                      label: Text('Lost',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      numeric: true,
+                    ),
+                    DataColumn(
+                      label: Text('GF',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      numeric: true,
+                    ),
+                    DataColumn(
+                      label: Text('GA',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      numeric: true,
+                    ),
+                    DataColumn(
+                      label: Text('GD',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      numeric: true,
+                    ),
+                    DataColumn(
+                      label: Text('Points',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      numeric: true,
+                    ),
+                  ],
+                  rows: [
+                    for (var club in snapshot.data!.standings[0]['table'])
+                      DataRow(
+                        cells: [
+                          DataCell(Row(
+                            children: [
+                              SizedBox(
+                                width: 20,
+                                child: Text(
+                                    club['position'] < 10
+                                        ? '  ${club['position']}'
+                                        : '${club['position']}',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                              const SizedBox(width: 10),
+                              SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: club['team']['crest'].endsWith('.svg')
+                                    ? SvgPicture.network(
+                                        "${club['team']['crest']}",
+                                        width: 30,
+                                        height: 30,
+                                        fit: BoxFit.contain)
+                                    : Image.network("${club['team']['crest']}",
+                                        width: 30,
+                                        height: 30,
+                                        fit: BoxFit.contain),
+                              ),
+                              const SizedBox(width: 10),
+                              Text(club['team']['shortName'],
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold))
+                            ],
+                          )),
+                          DataCell(Text(club['playedGames'].toString())),
+                          DataCell(Text(club['won'].toString())),
+                          DataCell(Text(club['draw'].toString())),
+                          DataCell(Text(club['lost'].toString())),
+                          DataCell(Text(club['goalsFor'].toString())),
+                          DataCell(Text(club['goalsAgainst'].toString())),
+                          DataCell(Text(club['goalDifference'].toString())),
+                          DataCell(Text(
+                            club['points'].toString(),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          )),
+                        ],
+                      ),
+                  ],
+                ),
               ),
-            ),
-          );
-        } else {
-          return const Text('No data available',
-              style: TextStyle(fontWeight: FontWeight.bold));
-        }
-      },
+            );
+          } else {
+            return const Text('No data available',
+                style: TextStyle(fontWeight: FontWeight.bold));
+          }
+        },
+      ),
     );
   }
 }

@@ -38,10 +38,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-      child: Container(
-        color: Colors.white,
+    return Container(
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: Column(children: [
           FutureBuilder(
             future: _buildMyProfileSction(),
@@ -658,9 +658,9 @@ class _ProfilePageState extends State<ProfilePage> {
     String formattedDate = DateFormat('dd MMM yyyy').format(utcDate.toLocal());
     String formattedTime = DateFormat('HH:mm').format(utcDate.toLocal());
 
-    String crestHomeUrl = 'https://corsproxy.io/?${match['homeTeam']['crest']}';
+    String crestHomeUrl = '${match['homeTeam']['crest']}';
     Widget crestHomeWidget;
-    String crestAwayUrl = 'https://corsproxy.io/?${match['awayTeam']['crest']}';
+    String crestAwayUrl = '${match['awayTeam']['crest']}';
     Widget crestAwayWidget;
 
     if (crestHomeUrl.endsWith('.svg')) {

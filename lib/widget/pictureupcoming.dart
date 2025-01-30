@@ -12,9 +12,9 @@ class PictureUpcoming extends StatelessWidget {
     String formattedDate = DateFormat('dd MMMM yyyy').format(utcDate.toLocal());
     String formattedTime = DateFormat('HH:mm').format(utcDate.toLocal());
 
-    String crestHomeUrl = 'https://corsproxy.io/?${match['homeTeam']['crest']}';
+    String crestHomeUrl = '${match['homeTeam']['crest']}';
     Widget crestHomeWidget;
-    String crestAwayUrl = 'https://corsproxy.io/?${match['awayTeam']['crest']}';
+    String crestAwayUrl = '${match['awayTeam']['crest']}';
     Widget crestAwayWidget;
 
     if (crestHomeUrl.endsWith('.svg')) {

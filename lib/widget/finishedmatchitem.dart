@@ -21,11 +21,9 @@ class _FinishedMatchItemState extends State<FinishedMatchItem> {
     DateTime utcDate = DateTime.parse(widget.match['utcDate']);
     String formattedDate = DateFormat('dd MMM yyyy').format(utcDate.toLocal());
 
-    String crestHomeUrl =
-        'https://corsproxy.io/?${widget.match['homeTeam']['crest']}';
+    String crestHomeUrl = '${widget.match['homeTeam']['crest']}';
     Widget crestHomeWidget;
-    String crestAwayUrl =
-        'https://corsproxy.io/?${widget.match['awayTeam']['crest']}';
+    String crestAwayUrl = '${widget.match['awayTeam']['crest']}';
     Widget crestAwayWidget;
 
     if (crestHomeUrl.endsWith('.svg')) {
@@ -67,8 +65,8 @@ class _FinishedMatchItemState extends State<FinishedMatchItem> {
                 isScrollControlled: true,
                 backgroundColor: Colors.transparent,
                 context: context,
-                builder: (context) =>
-                    ShareSheet(child: PictureLiveAndFinish(match: widget.match)));
+                builder: (context) => ShareSheet(
+                    child: PictureLiveAndFinish(match: widget.match)));
           },
           backgroundColor: Colors.blue,
           icon: Icons.share,

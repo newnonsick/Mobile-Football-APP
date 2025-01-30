@@ -7,9 +7,9 @@ class PictureLiveAndFinish extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String crestHomeUrl = 'https://corsproxy.io/?${match['homeTeam']['crest']}';
+    String crestHomeUrl = '${match['homeTeam']['crest']}';
     Widget crestHomeWidget;
-    String crestAwayUrl = 'https://corsproxy.io/?${match['awayTeam']['crest']}';
+    String crestAwayUrl = '${match['awayTeam']['crest']}';
     Widget crestAwayWidget;
 
     if (crestHomeUrl.endsWith('.svg')) {

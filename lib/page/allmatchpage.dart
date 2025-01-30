@@ -62,8 +62,8 @@ class _AllMatchPageState extends State<AllMatchPage>
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            colorScheme: const ColorScheme.dark(
-              primary: Colors.black,
+            colorScheme: ColorScheme.light(
+              primary: Colors.pink[800]!,
               onPrimary: Colors.white,
               surface: Colors.white,
               onSurface: Colors.black,
@@ -100,10 +100,10 @@ class _AllMatchPageState extends State<AllMatchPage>
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Container(
-          color: Colors.white,
+      body: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -131,7 +131,8 @@ class _AllMatchPageState extends State<AllMatchPage>
                         onPressed: () => _showDatePicker(context),
                         child: Text(
                           'Select Date',
-                          style: TextStyle(color: Colors.pink[800], fontSize: 15),
+                          style:
+                              TextStyle(color: Colors.pink[800], fontSize: 15),
                         ),
                       ),
                     ],
@@ -252,9 +253,9 @@ class _AllMatchPageState extends State<AllMatchPage>
     DateTime utcDate = DateTime.parse(match['utcDate']);
     String formattedDate = DateFormat('dd MMM yyyy').format(utcDate.toLocal());
 
-    String crestHomeUrl = 'https://corsproxy.io/?${match['homeTeam']['crest']}';
+    String crestHomeUrl = '${match['homeTeam']['crest']}';
     Widget crestHomeWidget;
-    String crestAwayUrl = 'https://corsproxy.io/?${match['awayTeam']['crest']}';
+    String crestAwayUrl = '${match['awayTeam']['crest']}';
     Widget crestAwayWidget;
 
     if (crestHomeUrl.endsWith('.svg')) {

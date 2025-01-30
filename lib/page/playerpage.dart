@@ -25,12 +25,13 @@ class _PlayerPageState extends State<PlayerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           FutureBuilder<PaletteGenerator>(
             future: PaletteGenerator.fromImageProvider(
               NetworkImage(
-                  'https://corsproxy.io/?https://resources.premierleague.com/premierleague/photos/players/110x140/${widget.player['altIds']['opta']}.png',
+                  'https://resources.premierleague.com/premierleague/photos/players/110x140/${widget.player['altIds']['opta']}.png',
                   scale: 0.5),
             ),
             builder: (context, snapshot) {
@@ -58,13 +59,15 @@ class _PlayerPageState extends State<PlayerPage> {
             child: Opacity(
               opacity: 0.7,
               child: Container(
-                margin: const EdgeInsets.only(left: 15),
+                width: 40,
+                height: 40,
+                margin: const EdgeInsets.only(left: 15, top: 10),
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(50),
                 ),
                 child: IconButton(
-                    icon: const Icon(Icons.arrow_back_ios_rounded),
+                    icon: const Icon(Icons.arrow_back_ios_rounded, size: 20,),
                     onPressed: () {
                       Get.back();
                     }),
@@ -153,7 +156,7 @@ class _PlayerPageState extends State<PlayerPage> {
                               Row(
                                 children: [
                                   Image.network(
-                                      "https://corsproxy.io/?https://resources.premierleague.com/premierleague/badges/50/${widget.player['currentTeam']['altIds']['opta']}@x2.png",
+                                      "https://resources.premierleague.com/premierleague/badges/50/${widget.player['currentTeam']['altIds']['opta']}@x2.png",
                                       width: 25,
                                       height: 25,
                                       fit: BoxFit.contain),
@@ -189,7 +192,7 @@ class _PlayerPageState extends State<PlayerPage> {
                       ),
                     ),
                     Image.network(
-                      'https://corsproxy.io/?https://resources.premierleague.com/premierleague/photos/players/250x250/${widget.player['altIds']['opta']}.png',
+                      'https://resources.premierleague.com/premierleague/photos/players/250x250/${widget.player['altIds']['opta']}.png',
                       height: 190,
                       width: 190,
                       fit: BoxFit.contain,
@@ -345,7 +348,7 @@ class _PlayerPageState extends State<PlayerPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Image.network(
-                          "https://corsproxy.io/?https://resources.premierleague.com/premierleague/badges/50/${widget.player['currentTeam']['altIds']['opta']}@x2.png",
+                          "https://resources.premierleague.com/premierleague/badges/50/${widget.player['currentTeam']['altIds']['opta']}@x2.png",
                           width: 25,
                           height: 25,
                           fit: BoxFit.contain),
