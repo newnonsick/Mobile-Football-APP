@@ -5,10 +5,10 @@ class CustomNavigationBar extends StatelessWidget {
   final ValueChanged<int> onItemTapped;
 
   const CustomNavigationBar({
-    Key? key,
+    super.key,
     required this.selectedIndex,
     required this.onItemTapped,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -70,12 +70,12 @@ Widget _buildButton(IconData icon, int selectedIndex,
   return Expanded(
     child: TextButton(
       style: ButtonStyle(
-        overlayColor: MaterialStateProperty.resolveWith<Color>(
-          (Set<MaterialState> states) {
+        overlayColor: WidgetStateProperty.resolveWith<Color>(
+          (Set<WidgetState> states) {
             return Colors.transparent;
           },
         ),
-        backgroundColor: MaterialStateProperty.all<Color>(
+        backgroundColor: WidgetStateProperty.all<Color>(
           Colors.transparent,
         ),
       ),

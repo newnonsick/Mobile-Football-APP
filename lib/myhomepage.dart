@@ -8,6 +8,7 @@ import 'package:project/provider/coins_provider.dart';
 import 'package:project/widget/custom_navigationbar.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -26,7 +27,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     super.initState();
     startCoinsTimer();
     WidgetsBinding.instance.addObserver(this);
-    socket = io.io('http://132.145.68.135:6010/', <String, dynamic>{
+    socket = io.io('${dotenv.env['API_URL']}', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });

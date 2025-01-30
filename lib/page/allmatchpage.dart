@@ -15,7 +15,7 @@ import '../api/matchesofday_api.dart';
 // import 'api/allmatches_api.dart';
 
 class AllMatchPage extends StatefulWidget {
-  const AllMatchPage({Key? key}) : super(key: key);
+  const AllMatchPage({super.key});
 
   @override
   State<AllMatchPage> createState() => _AllMatchPageState();

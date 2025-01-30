@@ -7,7 +7,7 @@ import 'package:project/myhomepage.dart';
 import 'package:project/utils/showtoast.dart';
 
 class SetUsernamePage extends StatefulWidget {
-  const SetUsernamePage({Key? key}) : super(key: key);
+  const SetUsernamePage({super.key});
 
   @override
   _SetUsernamePageState createState() => _SetUsernamePageState();

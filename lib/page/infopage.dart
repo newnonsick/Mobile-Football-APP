@@ -5,7 +5,7 @@ import 'package:project/page/standingpage.dart';
 import 'package:project/page/statisticspage.dart';
 
 class InfoPage extends StatefulWidget {
-  const InfoPage({Key? key}) : super(key: key);
+  const InfoPage({super.key});
 
   @override
   State<InfoPage> createState() => _InfoPageState();
