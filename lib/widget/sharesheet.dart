@@ -1,8 +1,8 @@
 import 'dart:typed_data';
-import 'package:camera/camera.dart';
+// import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:project/page/camerapage.dart';
+// import 'package:project/page/camerapage.dart';
 import 'package:project/utils/showtoast.dart';
 import 'package:project/widget/makedismissible.dart';
 import 'package:project/utils/widgettoimage.dart';
@@ -155,12 +155,12 @@ class ShareSheet extends StatelessWidget {
                                                 ToastGravity.BOTTOM);
                                             return;
                                           }
-                                          final camera =
-                                              await availableCameras();
-                                          final image = await WidgetToImage
-                                              .takeScreenshot(child);
-                                          Get.to(() => CamearaPage(
-                                              cameras: camera, image: image));
+                                          // final camera =
+                                          //     await availableCameras();
+                                          // final image = await WidgetToImage
+                                          //     .takeScreenshot(child);
+                                          // Get.to(() => CamearaPage(
+                                          //     cameras: camera, image: image));
                                         },
                                         icon: const Icon(
                                           Icons.camera,

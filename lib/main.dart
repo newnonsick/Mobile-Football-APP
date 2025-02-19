@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
+    return ChangeNotifierProvider<CoinModel>(
       create: (context) => CoinModel(),
       child: GetMaterialApp(
         theme: ThemeData(fontFamily: 'Kanit'),
@@ -69,11 +69,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   bool _isUserLoggedIn() {
-    if (FirebaseAuth.instance.currentUser != null) {
-      return true;
-    } else {
-      return false;
-    }
+    return FirebaseAuth.instance.currentUser != null;
   }
 
   bool _isUserAlreadySetUsername() {
