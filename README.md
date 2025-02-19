@@ -51,8 +51,8 @@ This project is a Premier League Live Score application built with Flutter. It p
 
 ## Screenshots
 
-![Preview1](Preview1.png)
-![Preview2](Preview2.png)
+<img src="Preview1.png" alt="Preview 1" width="300">
+<img src="Preview2.png" alt="Preview 2" width="300">
 
 ## Contributing
 
